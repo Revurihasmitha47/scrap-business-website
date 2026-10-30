@@ -1,0 +1,12 @@
+node_modules/
+client/
+server/
+ui/node_modules/
+ui/dist/
+api/target/
+api/data/
+*.log
+.env
+*.env
+*.env.*
+!.env.example

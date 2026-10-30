@@ -1,0 +1,16 @@
+<header class="topbar">
+  <a class="brand" routerLink="/"><span class="brand-mark">↗</span> Scrap<span>Flow</span></a>
+  <button class="menu-toggle" (click)="menuOpen = !menuOpen" aria-label="Toggle navigation">☰</button>
+  <nav class="main-nav" [class.open]="menuOpen">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="menuOpen=false">Home</a>
+    <a routerLink="/register" routerLinkActive="active" (click)="menuOpen=false">Register</a>
+    <a routerLink="/bulk-seller" routerLinkActive="active" (click)="menuOpen=false">Bulk pickup</a>
+    <a routerLink="/client-admin" routerLinkActive="active" (click)="menuOpen=false">Business portal</a>
+    <ng-container *ngIf="auth.session$ | async as session; else signInLink">
+      <span class="user-pill">{{ session.user.email }}</span><button class="link-button" (click)="signOut()">Sign out</button>
+    </ng-container>
+    <ng-template #signInLink><a class="nav-cta" routerLink="/" fragment="sign-in" (click)="menuOpen=false">Sign in</a></ng-template>
+  </nav>
+</header>
+<main class="site-main"><router-outlet></router-outlet></main>
+<footer class="site-footer"><span class="brand">Scrap<span>Flow</span></span><span>Responsible recovery, made simple.</span><span>© 2026 ScrapFlow</span></footer>

@@ -1,49 +1,127 @@
 package com.scrapflow.controller;
 
-import com.scrapflow.auth.LocalUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import java.math.BigDecimal;
+import java.util.Map;
 import java.util.UUID;
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
-@RestController @RequestMapping("/api/auth")
+@RestController
+@RequestMapping("/api/auth")
 public class AuthController {
-    private final JdbcTemplate jdbc; private final PasswordEncoder encoder; private final AuthenticationManager manager; private final LocalUserService users;
-    private final HttpSessionSecurityContextRepository securityRepository = new HttpSessionSecurityContextRepository();
-    public AuthController(JdbcTemplate jdbc, PasswordEncoder encoder, AuthenticationManager manager, LocalUserService users) { this.jdbc=jdbc; this.encoder=encoder; this.manager=manager; this.users=users; }
+    private final JdbcTemplate jdbc;
+    private final PasswordEncoder encoder;
 
-    @PostMapping("/register") @ResponseStatus(HttpStatus.CREATED)
-    public LoginResponse register(@RequestBody RegisterRequest request, HttpServletRequest http) {
-        if (request.email == null || !request.email.contains("@") || request.password == null || request.password.length() < 8 || request.fullName == null || request.fullName.isBlank()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Valid name, email and 8-character password are required");
-        String type = "BULK_SELLER".equals(request.accountType) ? "BULK_SELLER" : "HOME_SELLER";
+    public AuthController(JdbcTemplate jdbc, PasswordEncoder encoder) {
+        this.jdbc = jdbc;
+        this.encoder = encoder;
+    }
+
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SessionResponse register(@Valid @RequestBody SellerRegistration request, HttpServletRequest http) {
+        String type = "BULK_SELLER".equals(request.accountType()) ? "BULK_SELLER" : "HOME_SELLER";
         UUID id = UUID.randomUUID();
-        try { jdbc.update("insert into profiles(id,email,password_hash,full_name,account_type,account_status) values(?,?,?,?,?,'ACTIVE')", id, request.email.trim().toLowerCase(), encoder.encode(request.password), request.fullName.trim(), type); }
-        catch (org.springframework.dao.DuplicateKeyException e) { throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered"); }
-        return login(new LoginRequest(request.email, request.password), http);
+        try {
+            jdbc.update("insert into profiles(id,email,password_hash,full_name,phone,account_type,email_verified) values(?,?,?,?,?,?,true)",
+                    id, normalize(request.email()), encoder.encode(request.password()), request.fullName().trim(), request.mobileNumber(), type);
+            jdbc.update("insert into seller_profiles(user_id,business_name,gstin,approximate_quantity) values(?,?,?,?)",
+                    id, request.businessName(), request.gstin(), request.approximateQuantity());
+        } catch (DuplicateKeyException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered");
+        }
+        return establishSession(id, normalize(request.email()), type, http);
     }
 
-    @PostMapping("/login") public LoginResponse login(@RequestBody LoginRequest request, HttpServletRequest http) {
-        var authentication = manager.authenticate(new UsernamePasswordAuthenticationToken(request.email.trim().toLowerCase(), request.password));
-        SecurityContext context = SecurityContextHolder.createEmptyContext(); context.setAuthentication(authentication); SecurityContextHolder.setContext(context); securityRepository.saveContext(context, http, null);
-        var user = users.find(authentication.getName());
-        return new LoginResponse(user.userId(), user.email());
+    @PostMapping("/setup/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SessionResponse setupAdmin(@Valid @RequestBody AdminRegistration request, HttpServletRequest http) {
+        Integer existing = jdbc.queryForObject("select count(*) from profiles where account_type='ADMIN'", Integer.class);
+        if (existing != null && existing > 0) throw new ResponseStatusException(HttpStatus.CONFLICT, "Admin registration is already closed");
+        UUID id = UUID.randomUUID();
+        try {
+            jdbc.update("insert into profiles(id,email,password_hash,full_name,phone,account_type,email_verified) values(?,?,?,?,?,'ADMIN',true)",
+                    id, normalize(request.email()), encoder.encode(request.password()), request.fullName().trim(), request.mobileNumber());
+        } catch (DuplicateKeyException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered");
+        }
+        return establishSession(id, normalize(request.email()), "ADMIN", http);
     }
 
-    @PostMapping("/logout") @ResponseStatus(HttpStatus.NO_CONTENT) public void logout(HttpServletRequest request) { SecurityContextHolder.clearContext(); HttpSession s=request.getSession(false); if(s!=null) s.invalidate(); }
-    @GetMapping("/session") public LoginResponse session() { var user = users.current(); return new LoginResponse(user.userId(), user.email()); }
+    @GetMapping("/setup/status")
+    public Map<String, Boolean> adminSetupStatus() {
+        Integer existing = jdbc.queryForObject("select count(*) from profiles where account_type='ADMIN'", Integer.class);
+        return Map.of("available", existing == null || existing == 0);
+    }
+
+    @PostMapping("/login")
+    public SessionResponse login(@Valid @RequestBody LoginRequest request, HttpServletRequest http) {
+        Map<String, Object> user;
+        try {
+            user = jdbc.queryForMap("select id,email,password_hash,account_type,account_status from profiles where lower(email)=lower(?)", normalize(request.email()));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect");
+        }
+        if (!encoder.matches(request.password(), (String) user.get("password_hash"))) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password is incorrect");
+        if (!"ACTIVE".equals(user.get("account_status"))) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This account is inactive");
+        return establishSession((UUID) user.get("id"), (String) user.get("email"), (String) user.get("account_type"), http);
+    }
+
+    @GetMapping("/session")
+    public SessionResponse session(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not signed in");
+        return new SessionResponse((UUID) session.getAttribute("userId"), (String) session.getAttribute("email"), (String) session.getAttribute("fullName"), (String) session.getAttribute("accountType"));
+    }
+
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) session.invalidate();
+    }
+
+    @PostMapping("/accept-invite")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SessionResponse acceptInvite(@Valid @RequestBody InviteAcceptance request, HttpServletRequest http) {
+        Map<String, Object> invite;
+        try { invite = jdbc.queryForMap("select id,email,expires_at,accepted_at,invited_by from staff_invitations where token_hash=?", hash(request.token())); }
+        catch (Exception e) { throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invitation not found"); }
+        if (invite.get("accepted_at") != null || ((java.sql.Timestamp) invite.get("expires_at")).toInstant().isBefore(java.time.Instant.now())) throw new ResponseStatusException(HttpStatus.GONE, "Invitation has expired or was already used");
+        UUID id = UUID.randomUUID(); String email = (String) invite.get("email");
+        try { jdbc.update("insert into profiles(id,email,password_hash,full_name,account_type,email_verified) values(?,?,?,?, 'STAFF', true)", id, email, encoder.encode(request.password()), request.fullName().trim()); }
+        catch (DuplicateKeyException e) { throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered"); }
+        jdbc.update("update staff_invitations set accepted_at=now() where id=?", invite.get("id"));
+        return establishSession(id, email, "STAFF", http);
+    }
+
+    private SessionResponse establishSession(UUID id, String email, String type, HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        String fullName = jdbc.queryForObject("select full_name from profiles where id=?", String.class, id);
+        session.setAttribute("userId", id); session.setAttribute("email", email); session.setAttribute("fullName", fullName); session.setAttribute("accountType", type);
+        return new SessionResponse(id, email, fullName, type);
+    }
+
+    private String normalize(String email) { return email.trim().toLowerCase(); }
+    private String hash(String value) { try { return Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8))); } catch (Exception e) { throw new IllegalStateException(e); } }
+
+    public record SessionResponse(UUID userId, String email, String fullName, String accountType) {}
     public record LoginRequest(@NotBlank @Email String email, @NotBlank String password) {}
-    public record RegisterRequest(@NotBlank @Email String email, @NotBlank @Size(min=8) String password, @NotBlank String fullName, String accountType) {}
-    public record LoginResponse(UUID userId, String email) {}
+    public record AdminRegistration(@NotBlank String fullName, @NotBlank @Email String email, @NotBlank @Size(min = 8) String password, String mobileNumber) {}
+    public record SellerRegistration(@NotBlank String fullName, @NotBlank @Email String email, @NotBlank @Size(min = 8) String password,
+                                     String mobileNumber, String accountType, String businessName, String gstin, BigDecimal approximateQuantity) {}
+    public record InviteAcceptance(@NotBlank String token, @NotBlank String fullName, @NotBlank @Size(min = 8) String password) {}
 }

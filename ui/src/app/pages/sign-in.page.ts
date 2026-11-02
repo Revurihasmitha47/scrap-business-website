@@ -9,5 +9,5 @@ import { AuthService } from '../auth/auth.service';
 ` })
 export class SignInPageComponent {
   private readonly auth=inject(AuthService); private readonly router=inject(Router); email='';password='';showPassword=false;busy=false;error='';
-  async submit(form:NgForm):Promise<void>{if(form.invalid||this.busy){form.control.markAllAsTouched();return;}this.busy=true;this.error='';try{await this.auth.login(this.email.trim(),this.password);await this.router.navigateByUrl(this.auth.session?.accountType==='ADMIN'?'/admin/dashboard':'/dashboard');}catch(e){this.error=this.auth.errorMessage(e,'Sign-in failed. Please check your credentials.');}finally{this.busy=false;}}
+  async submit(form:NgForm):Promise<void>{if(form.invalid||this.busy){form.control.markAllAsTouched();return;}this.busy=true;this.error='';try{await this.auth.login(this.email.trim(),this.password);if(this.auth.session?.mustChangePassword){await this.router.navigateByUrl('/change-password');return;}const role=this.auth.session?.accountType;await this.router.navigateByUrl(role==='ADMIN'?'/admin/dashboard':role==='STAFF'?'/staff/my-pickups':role==='BULK_SELLER'?'/seller/request':role==='HOME_SELLER'?'/seller/request':'/dashboard');}catch(e){this.error=this.auth.errorMessage(e,'Sign-in failed. Please check your credentials.');}finally{this.busy=false;}}
 }

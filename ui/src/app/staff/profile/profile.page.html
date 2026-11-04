@@ -1,0 +1,148 @@
+<div class="staff-shell">
+  <app-staff-sidebar />
+  <main class="staff-main">
+    <app-staff-header />
+    <section class="staff-content">
+      <div class="staff-page-heading">
+        <span class="staff-eyebrow">ACCOUNT SETTINGS</span>
+        <h1>My Profile</h1>
+        <p>Manage your staff account information</p>
+      </div>
+      <p class="staff-message" *ngIf="message">{{ message }}</p>
+      <p class="staff-error" *ngIf="error">{{ error }}</p>
+      <div class="staff-profile-layout" *ngIf="profile">
+        <aside class="staff-profile-summary">
+          <div class="staff-profile-avatar">{{ initials }}</div>
+          <h2>{{ profile.full_name }}</h2>
+          <p>{{ profile.email }}</p>
+          <span class="staff-active-badge"
+            >✓ {{ profile.account_status || 'ACTIVE' }}</span
+          >
+          <div><span>Role</span><strong>Pickup Staff</strong></div>
+          <div>
+            <span>Member since</span
+            ><strong
+              >{{ profile.created_at ? (profile.created_at | date:'mediumDate')
+              : '—' }}</strong
+            >
+          </div>
+        </aside>
+        <section class="staff-profile-card">
+          <div class="staff-section-heading">
+            <div>
+              <span class="staff-eyebrow">PERSONAL INFORMATION</span>
+              <h2>Profile details</h2>
+            </div>
+            <button
+              class="staff-outline-button"
+              *ngIf="!editing"
+              type="button"
+              (click)="startEdit()"
+            >
+              ✎ Edit profile
+            </button>
+          </div>
+          <form *ngIf="editing; else readOnly" (ngSubmit)="save">
+            <div class="staff-profile-form">
+              <label
+                >First name *<input
+                  name="firstName"
+                  [(ngModel)]="draft.firstName"
+                  required /></label
+              ><label
+                >Last name<input
+                  name="lastName"
+                  [(ngModel)]="draft.lastName" /></label
+              ><label
+                >Email address<input [value]="profile.email" disabled /></label
+              ><label
+                >Phone number<input
+                  name="phone"
+                  [(ngModel)]="draft.phone" /></label
+              ><label
+                >Gender<select name="gender" [(ngModel)]="draft.gender">
+                  <option value="">Select gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                  <option>Prefer not to say</option>
+                </select></label
+              ><label
+                >Country<input
+                  name="country"
+                  [(ngModel)]="draft.country" /></label
+              ><label
+                >State<input name="state" [(ngModel)]="draft.state" /></label
+              ><label>City<input name="city" [(ngModel)]="draft.city" /></label
+              ><label
+                >ZIP / postal code<input
+                  name="zipCode"
+                  [(ngModel)]="draft.zip_code" /></label
+              ><label class="wide-field"
+                >Address line 1<input
+                  name="address1"
+                  [(ngModel)]="draft.address_line1" /></label
+              ><label class="wide-field"
+                >Address line 2<input
+                  name="address2"
+                  [(ngModel)]="draft.address_line2"
+              /></label>
+            </div>
+            <div class="staff-profile-actions">
+              <button
+                class="staff-secondary-button"
+                type="button"
+                (click)="editing = false"
+              >
+                Cancel</button
+              ><button class="staff-primary-button" [disabled]="saving">
+                {{ saving ? 'Saving...' : 'Save changes' }}
+              </button>
+            </div>
+          </form>
+          <ng-template #readOnly
+            ><div class="staff-profile-read-grid">
+              <div>
+                <span>Full name</span><strong>{{ profile.full_name }}</strong>
+              </div>
+              <div>
+                <span>Email address</span><strong>{{ profile.email }}</strong>
+              </div>
+              <div>
+                <span>Phone number</span
+                ><strong>{{ profile.phone || 'Not provided' }}</strong>
+              </div>
+              <div>
+                <span>Gender</span
+                ><strong>{{ profile.gender || 'Not provided' }}</strong>
+              </div>
+              <div>
+                <span>Country</span
+                ><strong>{{ profile.country || 'Not provided' }}</strong>
+              </div>
+              <div>
+                <span>State / city</span
+                ><strong
+                  >{{ profile.state || '—' }}{{ profile.city ? ' / ' +
+                  profile.city : '' }}</strong
+                >
+              </div>
+              <div class="wide-field">
+                <span>Address</span
+                ><strong
+                  >{{ profile.address_line1 || 'Not provided' }}{{
+                  profile.address_line2 ? ', ' + profile.address_line2 : ''
+                  }}</strong
+                >
+              </div>
+              <div>
+                <span>ZIP / postal code</span
+                ><strong>{{ profile.zip_code || 'Not provided' }}</strong>
+              </div>
+            </div></ng-template
+          >
+        </section>
+      </div>
+    </section>
+  </main>
+</div>

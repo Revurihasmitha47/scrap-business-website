@@ -1,0 +1,180 @@
+:host {
+  display: block;
+}
+
+.pickup-detail-content {
+  padding-bottom: 42px;
+}
+
+.pickup-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
+  gap: 18px;
+}
+
+.pickup-detail-card {
+  padding: 24px;
+  border: 1px solid #dfeae1;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 7px 22px rgba(23, 62, 51, 0.05);
+}
+
+.pickup-detail-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.pickup-detail-heading h2,
+.pickup-summary-card h2 {
+  margin: 0;
+  color: #123e32;
+  font-size: 22px;
+}
+
+.pickup-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.pickup-facts-grid div,
+.summary-row {
+  display: grid;
+  gap: 5px;
+}
+
+.pickup-facts-grid span,
+.summary-row span {
+  color: #80948a;
+  font-size: 11px;
+}
+
+.pickup-facts-grid strong,
+.summary-row strong {
+  color: #244e3f;
+  font-size: 14px;
+}
+
+.pickup-facts-grid small {
+  color: #80948a;
+  font-size: 11px;
+}
+
+.pickup-detail-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #edf1ed;
+}
+
+.pickup-detail-section h3 {
+  margin: 0 0 7px;
+  color: #244e3f;
+  font-size: 14px;
+}
+
+.pickup-detail-section p {
+  margin: 0;
+  color: #60776b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.pickup-summary-card {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.summary-row {
+  padding-bottom: 14px;
+  border-bottom: 1px solid #edf1ed;
+}
+
+.summary-total {
+  padding-top: 4px;
+}
+
+.summary-total strong {
+  color: #f26636;
+  font-size: 22px;
+}
+
+.detail-primary-button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  background: #159b63;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.pickup-items-card {
+  margin-top: 18px;
+}
+
+.pickup-items-card .pickup-detail-heading > span {
+  color: #80948a;
+  font-size: 12px;
+}
+
+.pickup-items-table {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.8fr 0.8fr;
+  gap: 16px;
+  align-items: center;
+  min-height: 54px;
+  border-top: 1px solid #edf1ed;
+  color: #48685b;
+  font-size: 13px;
+}
+
+.pickup-items-header {
+  min-height: 46px;
+  border: 0;
+  color: #6c8176;
+  background: #f1f6f1;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.pickup-items-table strong {
+  color: #244e3f;
+}
+
+.detail-empty,
+.detail-loading {
+  color: #80948a;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .pickup-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .pickup-detail-card {
+    padding: 18px;
+  }
+
+  .pickup-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pickup-items-table {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 8px;
+    padding: 10px 0;
+  }
+
+  .pickup-items-header {
+    display: none;
+  }
+}

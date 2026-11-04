@@ -1,0 +1,34 @@
+<div class="cms-pagination">
+  <label>
+    SIZE
+    <select
+      [ngModel]="pageSize"
+      (ngModelChange)="pageSizeChange.emit(+$event)">
+      <option
+        *ngFor="let size of pageSizeOptions"
+        [value]="size">
+        {{ size }}
+      </option>
+    </select>
+  </label>
+
+  <span>{{ start }}-{{ end }} of {{ totalItems }}</span>
+
+  <div class="cms-pagination__pager">
+    <button
+      type="button"
+      [disabled]="currentPage <= 1"
+      (click)="pageChange.emit(currentPage - 1)">
+      ‹
+    </button>
+
+    <strong>{{ currentPage }}</strong>
+
+    <button
+      type="button"
+      [disabled]="currentPage >= totalPages"
+      (click)="pageChange.emit(currentPage + 1)">
+      ›
+    </button>
+  </div>
+</div>

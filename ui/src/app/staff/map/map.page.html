@@ -1,0 +1,28 @@
+<div class="staff-shell">
+  <app-staff-sidebar />
+  <main class="staff-main">
+    <app-staff-header />
+    <section class="staff-content">
+      <div class="staff-page-heading">
+        <h1>Pickup Map</h1>
+        <p>View locations assigned to you today</p>
+      </div>
+      <section class="staff-map-card">
+        <div class="staff-map-placeholder">
+          <span>⌖</span>
+          <h2>Assigned pickup locations</h2>
+          <p>Map provider is not configured yet.</p>
+          <a [href]="mapLink" target="_blank">Open addresses in Maps</a>
+        </div>
+        <div class="staff-map-list">
+          <h2>Today's locations</h2>
+          <article *ngFor="let pickup of pickups">
+            <strong>{{ pickup.seller_name || 'Seller' }}</strong>
+            <span>{{ addressText(pickup.pickup_address) }}</span>
+          </article>
+          <p *ngIf="!pickups.length">No assigned pickup locations.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,35 @@
+<div class="staff-shell">
+  <app-staff-sidebar />
+  <main class="staff-main">
+    <app-staff-header />
+    <section class="staff-content">
+      <div class="staff-page-heading">
+        <h1>Notifications</h1>
+        <p>Updates about your assignments and pickups</p>
+      </div>
+      <section class="staff-notification-card">
+        <p class="staff-error" *ngIf="error">{{ error }}</p>
+        <button
+          class="staff-notification-row"
+          type="button"
+          *ngFor="let item of notifications"
+          [class.unread]="!item.is_read"
+          (click)="read(item)"
+        >
+          <span class="staff-notification-icon"
+            ><svg viewBox="0 0 24 24">
+              <path
+                d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Zm-8 12h4"
+              /></svg></span
+          ><span
+            ><strong>{{ item.title }}</strong><small>{{ item.message }}</small
+            ><em>{{ item.created_at | date:'medium' }}</em></span
+          ><b *ngIf="!item.is_read">New</b>
+        </button>
+        <p class="staff-empty" *ngIf="!notifications.length">
+          No notifications yet.
+        </p>
+      </section>
+    </section>
+  </main>
+</div>

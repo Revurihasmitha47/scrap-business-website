@@ -1,0 +1,173 @@
+<div class="seller-shell">
+  <app-seller-sidebar></app-seller-sidebar>
+
+  <main class="seller-main">
+    <app-seller-header></app-seller-header>
+
+    <section class="seller-content seller-dashboard-page">
+      <div class="seller-title">
+        <div>
+          <p>SCRAPFLOW {{ isBulk ? "BULK SELLER" : "HOME SELLER" }}</p>
+          <h1>{{ sellerLabel }} Dashboard</h1>
+          <span>
+            {{ isBulk ? "Manage bulk pickup activity and current rates." :
+            "Track your home pickup activity and current rates." }}
+          </span>
+        </div>
+      </div>
+
+      <div class="seller-alert error" *ngIf="error">{{ error }}</div>
+
+      <section class="seller-dashboard-welcome">
+        <div>
+          <p class="seller-dashboard-eyebrow">YOUR SCRAPFLOW ACCOUNT</p>
+          <h2>Welcome back, {{ firstName }}!</h2>
+          <p>Let’s make your home greener together.</p>
+        </div>
+
+        <div class="seller-welcome-illustration" aria-hidden="true">
+          <svg viewBox="0 0 250 150">
+            <circle cx="125" cy="76" r="67" fill="#eef8e9" />
+            <path
+              d="M72 75 124 33l53 42v52H72z"
+              fill="#fff"
+              stroke="#1b6548"
+              stroke-width="4"
+            />
+            <path
+              d="m63 77 61-51 62 51"
+              fill="none"
+              stroke="#f36b36"
+              stroke-width="10"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M111 127V91h28v36"
+              fill="#d9efe0"
+              stroke="#1b6548"
+              stroke-width="4"
+            />
+            <rect
+              x="85"
+              y="82"
+              width="18"
+              height="20"
+              rx="2"
+              fill="#d9efe0"
+              stroke="#1b6548"
+              stroke-width="3"
+            />
+            <rect
+              x="150"
+              y="82"
+              width="18"
+              height="20"
+              rx="2"
+              fill="#d9efe0"
+              stroke="#1b6548"
+              stroke-width="3"
+            />
+            <path
+              d="M35 121V74m-14 17 14-19 15 19m-15 4L22 81m13 14 13-16"
+              fill="none"
+              stroke="#3d9a57"
+              stroke-width="7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M215 121V67m-15 20 15-22 16 22m-16 5-15-19m15 23 16-19"
+              fill="none"
+              stroke="#3d9a57"
+              stroke-width="7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <section class="seller-dashboard-section">
+        <div class="seller-dashboard-section-heading">
+          <h2>Current Scrap Rates <span>(per kg)</span></h2>
+          <a routerLink="/seller/rates">View All Rates →</a>
+        </div>
+
+        <div
+          class="seller-dashboard-rate-cards"
+          *ngIf="rates.length; else noRates"
+        >
+          <article
+            class="seller-dashboard-rate-card"
+            *ngFor="let rate of rates | slice: 0 : 3; let i = index"
+          >
+            <span
+              class="seller-dashboard-rate-icon"
+              [class.rate-icon-blue]="i % 3 === 0"
+              [class.rate-icon-green]="i % 3 === 1"
+              [class.rate-icon-orange]="i % 3 === 2"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v18M7 8h7a3 3 0 1 1 0 6H9a3 3 0 1 0 0 6h8" />
+              </svg>
+            </span>
+            <span class="seller-dashboard-rate-info">
+              <strong>{{ rate.name }}</strong>
+              <b>₹{{ rate.rate | number: "1.0-2" }}</b>
+              <small>per kg</small>
+            </span>
+          </article>
+        </div>
+
+        <ng-template #noRates>
+          <div class="seller-empty">No active scrap rates are available.</div>
+        </ng-template>
+      </section>
+
+      <a class="seller-dashboard-request-cta" routerLink="/seller/request">
+        <span>▣</span>
+        <strong
+          >{{ isBulk ? "Request a Bulk Pickup" : "Request a Pickup" }}</strong
+        >
+        <span>→</span>
+      </a>
+
+      <section class="seller-dashboard-status seller-card">
+        <div class="seller-dashboard-section-heading">
+          <h2>My Pickup Status</h2>
+          <a routerLink="/seller/requests">View All →</a>
+        </div>
+
+        <div
+          class="seller-dashboard-pickup-table"
+          *ngIf="pickups.length; else noPickups"
+        >
+          <div class="seller-dashboard-pickup-head">
+            <span>Request</span>
+            <span>Scrap Items</span>
+            <span>Pickup Date</span>
+            <span>Status</span>
+          </div>
+          <a
+            class="seller-dashboard-pickup-row"
+            *ngFor="let pickup of pickups | slice: 0 : 5"
+            [routerLink]="['/seller/requests', pickup.id]"
+          >
+            <strong>REQ-{{ pickup.id | slice: 0 : 8 }}</strong>
+            <span>{{ pickupItemsLabel(pickup) }}</span>
+            <span>{{ pickup.preferred_date | date: "MMM d, y" }}</span>
+            <span class="seller-pill">{{ prettyStatus(pickup.status) }}</span>
+          </a>
+        </div>
+
+        <ng-template #noPickups>
+          <div class="seller-empty">
+            <p>You have not requested a pickup yet.</p>
+            <a routerLink="/seller/request">Create your first pickup request</a>
+          </div>
+        </ng-template>
+      </section>
+    </section>
+  </main>
+</div>

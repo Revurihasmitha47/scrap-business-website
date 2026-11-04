@@ -1,0 +1,111 @@
+<div class="seller-shell">
+  <app-seller-sidebar></app-seller-sidebar>
+
+  <main class="seller-main">
+    <app-seller-header></app-seller-header>
+
+    <section class="seller-content seller-data-page">
+      <div class="seller-title">
+        <div>
+          <p>SCRAPFLOW {{ isBulk ? "BULK SELLER" : "HOME SELLER" }}</p>
+          <h1>{{ isHistory ? "Pickup History" : "My Requests" }}</h1>
+          <span>
+            {{ isHistory ? "Review your completed and past pickup requests." :
+            "Track pickup requests submitted from your account." }}
+          </span>
+        </div>
+      </div>
+
+      <div class="seller-alert error" *ngIf="error">{{ error }}</div>
+
+      <section class="seller-card seller-data-card">
+        <app-query-bar
+          [searchPlaceholder]="isHistory ? 'Search pickup history...' : 'Search requests...'"
+          [searchValue]="search"
+          [filters]="filters"
+          [selectedFilter]="filter"
+          [viewMode]="viewMode"
+          (searchChange)="search = $event"
+          (filterChange)="filter = $event"
+          (viewModeChange)="viewMode = $event"
+        ></app-query-bar>
+
+        <app-cdn-table
+          [columns]="columns"
+          [rows]="filteredPickups"
+          [loading]="loading"
+          [viewMode]="viewMode === 'table' ? 'list' : 'card'"
+          [pageSizeOptions]="[5, 10, 25]"
+          emptyMessage="No pickup requests found."
+        >
+          <ng-template cdnTableCell="id" let-row>
+            <a
+              class="seller-data-link"
+              [routerLink]="['/seller/requests', row.id]"
+            >
+              PR-{{ row.id | slice: 0 : 8 }}
+            </a>
+          </ng-template>
+
+          <ng-template cdnTableCell="preferred_date" let-row>
+            <span class="seller-date-cell">
+              {{ row.preferred_date }}
+              <small>{{ row.preferred_time || "Time not set" }}</small>
+            </span>
+          </ng-template>
+
+          <ng-template cdnTableCell="estimated_amount" let-row>
+            <strong>₹{{ row.estimated_amount || 0 }}</strong>
+          </ng-template>
+
+          <ng-template cdnTableCell="status" let-row>
+            <span class="seller-pill"> {{ prettyStatus(row.status) }} </span>
+          </ng-template>
+
+          <ng-template cdnTableCard let-rows="rows">
+            <div class="seller-record-card-grid">
+              <article class="seller-record-card" *ngFor="let row of rows">
+                <div class="seller-record-card-heading">
+                  <a [routerLink]="['/seller/requests', row.id]">
+                    PR-{{ row.id | slice: 0 : 8 }}
+                  </a>
+                  <span class="seller-pill"
+                    >{{ prettyStatus(row.status) }}</span
+                  >
+                </div>
+                <div class="seller-record-card-details">
+                  <span>
+                    <small>Pickup date</small>
+                    <strong>{{ row.preferred_date }}</strong>
+                  </span>
+                  <span>
+                    <small>Time</small>
+                    <strong>{{ row.preferred_time || "Time not set" }}</strong>
+                  </span>
+                  <span>
+                    <small>Amount</small>
+                    <strong>₹{{ row.estimated_amount || 0 }}</strong>
+                  </span>
+                </div>
+                <a
+                  class="seller-card-action"
+                  [routerLink]="['/seller/requests', row.id]"
+                >
+                  View details
+                </a>
+              </article>
+            </div>
+          </ng-template>
+        </app-cdn-table>
+
+        <div class="seller-empty" *ngIf="!loading && !filteredPickups.length">
+          {{ isHistory ? "No pickup history yet." : "You have not submitted a
+          pickup request yet." }}
+          <a class="seller-link-button" routerLink="/seller/request">
+            Create a pickup request
+          </a>
+        </div>
+      </section>
+    </section>
+  </main>
+</div>

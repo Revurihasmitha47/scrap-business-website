@@ -1,0 +1,105 @@
+.cms-querybar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0 18px;
+}
+
+.cms-querybar__search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  max-width: 680px;
+  height: 46px;
+  padding: 0 15px;
+  border: 1px solid #bfe5d0;
+  border-radius: 24px;
+  color: #159b63;
+  background: #fff;
+}
+
+.cms-querybar__search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+}
+
+.cms-querybar__filter-btn {
+  min-height: 40px;
+  padding: 0 17px;
+  border: 0;
+  border-radius: 22px;
+  color: #fff;
+  background: #159b63;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.cms-querybar__spacer {
+  flex: 1;
+}
+
+.cms-querybar__toggle {
+  display: flex;
+  padding: 3px;
+  border: 1px solid #bfe5d0;
+  border-radius: 22px;
+}
+
+.cms-querybar__toggle button {
+  width: 37px;
+  height: 34px;
+  border: 0;
+  border-radius: 18px;
+  color: #597266;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cms-querybar__toggle button.active {
+  color: #fff;
+  background: #159b63;
+}
+
+.cms-querybar__panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #dce9df;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 12px 30px #173e3320;
+}
+
+.cms-querybar__panel label {
+  display: grid;
+  gap: 5px;
+  color: #6c8176;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.cms-querybar__panel select {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid #d4e2d7;
+  border-radius: 7px;
+}
+
+.cms-querybar__panel button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 7px;
+  color: #159b63;
+  background: #edf8f1;
+  cursor: pointer;
+}

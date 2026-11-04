@@ -1,0 +1,231 @@
+<div class="admin-shell assign-page">
+  <app-admin-sidebar [activeView]="'pickups'"></app-admin-sidebar>
+
+  <main class="admin-main">
+    <header class="admin-header">
+      <span>ScrapFlow</span>
+
+      <div class="admin-user">
+        <button
+          class="notification-button"
+          type="button"
+          aria-label="Notifications"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 10a6 6 0 0 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9Zm4 13h4" />
+          </svg>
+          <i></i>
+        </button>
+
+        <button
+          class="profile-trigger"
+          type="button"
+          (click)="profileMenu = !profileMenu"
+        >
+          <span class="admin-avatar">{{ initials }}</span>
+          <strong>{{ auth.session?.fullName || "Admin" }}</strong>
+          <span class="profile-chevron">⌄</span>
+        </button>
+
+        <div class="profile-menu" *ngIf="profileMenu">
+          <button type="button" (click)="openProfile()">Profile</button>
+          <button type="button" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="admin-content">
+      <div class="admin-page-title assign-page-title">
+        <div>
+          <h1>Assign Staff</h1>
+        </div>
+
+        <button
+          type="button"
+          class="admin-back"
+          routerLink="/admin/pickups"
+          aria-label="Back to pickup requests"
+        >
+          ←
+        </button>
+      </div>
+
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+
+      <div class="assign-layout">
+        <section class="admin-card assign-card">
+          <div class="assign-card-heading">
+            <div>
+              <h2>Available Staff</h2>
+              <p class="assign-muted">
+                Search and select a staff member for this pickup.
+              </p>
+            </div>
+            <span class="assign-count">{{ staff.length }} staff</span>
+          </div>
+
+          <div class="assign-toolbar">
+            <label>
+              <span>Search</span>
+              <input
+                [(ngModel)]="search"
+                (ngModelChange)="loadStaff()"
+                placeholder="Search by name or phone"
+              />
+            </label>
+
+            <label>
+              <span>Availability</span>
+              <select [(ngModel)]="availability" (ngModelChange)="loadStaff()">
+                <option value="">All availability</option>
+                <option value="AVAILABLE">Available</option>
+                <option value="ON_PICKUP">On pickup</option>
+                <option value="UNAVAILABLE">Unavailable</option>
+                <option value="ON_LEAVE">On leave</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Service area</span>
+              <input
+                [(ngModel)]="serviceArea"
+                (ngModelChange)="loadStaff()"
+                placeholder="Search service area"
+              />
+            </label>
+          </div>
+
+          <div class="assign-status-message" *ngIf="!assignmentAllowed">
+            {{ assignmentMessage }}
+          </div>
+
+          <div class="assign-loading" *ngIf="loading">Loading staff...</div>
+
+          <div class="assign-empty" *ngIf="!loading && !staff.length">
+            No staff found for the selected filters.
+          </div>
+
+          <div class="staff-list" *ngIf="!loading && staff.length">
+            <button
+              type="button"
+              class="staff-row"
+              *ngFor="let member of staff"
+              [class.selected]="selectedStaffId === member.id"
+              [class.disabled]="!member.can_assign || !assignmentAllowed"
+              [disabled]="!member.can_assign || !assignmentAllowed"
+              (click)="select(member)"
+            >
+              <span class="staff-avatar">
+                {{ (member.full_name || "S").slice(0, 1) }}
+              </span>
+
+              <span class="staff-details">
+                <strong>{{ member.full_name }}</strong>
+                <small>
+                  {{ member.phone || member.email }}
+                  <span *ngIf="member.service_area">
+                    · {{ member.service_area }}
+                  </span>
+                </small>
+                <small>
+                  {{ member.assigned_pickups || 0 }} active pickup(s)
+                </small>
+              </span>
+
+              <span
+                class="assign-badge"
+                [class.unavailable]="!member.can_assign"
+              >
+                {{ member.can_assign ? "Available" : member.unavailable_reason
+                }}
+              </span>
+
+              <span class="selected-mark" *ngIf="selectedStaffId === member.id">
+                ✓
+              </span>
+            </button>
+          </div>
+        </section>
+
+        <aside class="admin-card assign-summary">
+          <div class="assign-card-heading">
+            <div>
+              <p class="eyebrow">PICKUP INFORMATION</p>
+              <h2>Pickup Summary</h2>
+            </div>
+            <span
+              class="status-pill"
+              [class.status-green]="pickup?.status === 'COMPLETED'"
+            >
+              {{ pickup?.status || "Loading" }}
+            </span>
+          </div>
+
+          <div class="summary-facts">
+            <div>
+              <span>Request ID</span>
+              <strong>#PR-{{ pickup?.id | slice: 0 : 8 }}</strong>
+            </div>
+            <div>
+              <span>Seller</span>
+              <strong>
+                {{ pickup?.seller_name || "Seller" }}
+                <small>{{ pickup?.seller_type }}</small>
+              </strong>
+            </div>
+            <div>
+              <span>Preferred pickup</span>
+              <strong>
+                {{ pickup?.preferred_date || "—" }}
+                <small>{{ pickup?.preferred_time || "Flexible" }}</small>
+              </strong>
+            </div>
+            <div>
+              <span>Pickup address</span>
+              <strong>{{ addressText(pickup?.pickup_address) }}</strong>
+            </div>
+          </div>
+
+          <div class="summary-items">
+            <div class="summary-items-heading">
+              <span>Scrap category</span>
+              <span>Estimated weight</span>
+            </div>
+            <div *ngFor="let item of items">
+              <span>{{ item.category_name }}</span>
+              <strong>{{ item.estimated_quantity || 0 }} kg</strong>
+            </div>
+          </div>
+
+          <label class="assign-note">
+            Assignment note
+            <textarea
+              [(ngModel)]="note"
+              rows="4"
+              placeholder="Optional note; reason is required for reassignment"
+            ></textarea>
+          </label>
+
+          <div class="assign-actions">
+            <button
+              type="button"
+              class="secondary-button"
+              routerLink="/admin/pickups"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="primary-button"
+              [disabled]="!selectedStaffId || assigning || !assignmentAllowed"
+              (click)="assign()"
+            >
+              {{ assigning ? "Assigning..." : pickup?.assigned_staff_id ?
+              "Reassign Staff" : "Assign Staff" }}
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</div>

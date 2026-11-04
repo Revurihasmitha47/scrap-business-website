@@ -1,0 +1,161 @@
+<div class="admin-shell">
+  <app-admin-sidebar
+    [activeView]="'sellers'"
+    (viewChange)="navigateView($event)">
+  </app-admin-sidebar>
+
+  <main class="admin-main">
+    <header class="admin-header">
+      <span>ScrapFlow</span>
+      <div class="admin-user">
+        <button class="notification-button" type="button">
+          ♧<i></i>
+        </button>
+
+        <button
+          class="profile-trigger"
+          type="button"
+          (click)="profileMenu = !profileMenu">
+          <span class="admin-avatar">{{ initials }}</span>
+          <strong>{{ auth.session?.fullName || 'Admin' }}</strong>
+          <span>⌄</span>
+        </button>
+
+        <div class="profile-menu" *ngIf="profileMenu">
+          <button type="button" (click)="openProfile()">Profile</button>
+          <button type="button" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="admin-content sellers-content">
+      <div class="admin-page-title sellers-page-title">
+        <div>
+          <p class="eyebrow">OPERATIONS</p>
+          <h1>Sellers</h1>
+        </div>
+
+        <button
+          type="button"
+          class="admin-back"
+          (click)="navigateView('dashboard')">
+          ← Back
+        </button>
+      </div>
+
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+
+      <section class="admin-card full-admin-card admin-list-page">
+        <app-query-bar
+          searchPlaceholder="Search sellers by name or email..."
+          [searchValue]="search"
+          [filters]="filters"
+          [selectedFilter]="filter"
+          [viewMode]="viewMode"
+          (searchChange)="search = $event"
+          (filterChange)="filter = $event"
+          (viewModeChange)="viewMode = $event">
+        </app-query-bar>
+
+        <app-cdn-table
+          [columns]="columns"
+          [rows]="filteredSellers"
+          [viewMode]="viewMode === 'table' ? 'list' : 'card'"
+          [pageSizeOptions]="[5, 10, 25]"
+          [pagination]="true">
+
+          <ng-template cdnTableCell="name" let-row>
+            <strong>{{ row.name }}</strong>
+          </ng-template>
+
+          <ng-template cdnTableCell="type" let-row>
+            <span class="status-pill status-green">{{ row.type }}</span>
+          </ng-template>
+
+          <ng-template cdnTableCell="requests" let-row>
+            {{ row.requests }}
+          </ng-template>
+
+          <ng-template cdnTableCell="last_request" let-row>
+            {{ row.last_request | date:'dd-MM-yyyy' }}
+          </ng-template>
+
+          <ng-template cdnTableActions let-row>
+            <app-actions [items]="sellerActions(row)"></app-actions>
+          </ng-template>
+
+          <ng-template cdnTableCard let-rows="rows">
+            <div class="seller-card-grid">
+              <article class="seller-card" *ngFor="let row of rows">
+                <div class="seller-card-body">
+                  <div class="seller-card-heading">
+                    <div>
+                      <strong>{{ row.name }}</strong>
+                      <small>{{ row.email }}</small>
+                    </div>
+                    <span class="status-pill status-green">{{ row.type }}</span>
+                  </div>
+
+                  <p>Pickup requests: {{ row.requests }}</p>
+                  <p>Last request: {{ row.last_request | date:'dd-MM-yyyy' }}</p>
+                </div>
+
+                <div class="seller-card-footer">
+                  <span>Seller account</span>
+                  <app-actions [items]="sellerActions(row)"></app-actions>
+                </div>
+              </article>
+            </div>
+          </ng-template>
+        </app-cdn-table>
+      </section>
+
+      <div
+        class="category-modal-backdrop"
+        *ngIf="selectedSeller"
+        (click)="closeView()">
+        <section
+          class="category-modal seller-modal"
+          (click)="$event.stopPropagation()">
+          <div class="category-modal-heading">
+            <h2>Seller Details</h2>
+            <button
+              type="button"
+              class="category-modal-close"
+              (click)="closeView()">
+              ×
+            </button>
+          </div>
+
+          <div class="category-detail-row">
+            <span>Name</span>
+            <strong>{{ selectedSeller.name }}</strong>
+          </div>
+          <div class="category-detail-row">
+            <span>Email</span>
+            <strong>{{ selectedSeller.email }}</strong>
+          </div>
+          <div class="category-detail-row">
+            <span>Seller type</span>
+            <span class="status-pill status-green">{{ selectedSeller.type }}</span>
+          </div>
+          <div class="category-detail-row">
+            <span>Pickup requests</span>
+            <strong>{{ selectedSeller.requests }}</strong>
+          </div>
+          <div class="category-detail-row">
+            <span>Last request</span>
+            <strong>{{ selectedSeller.last_request | date:'dd-MM-yyyy' }}</strong>
+          </div>
+
+          <button
+            type="button"
+            class="primary-button category-modal-button"
+            (click)="closeView()">
+            Close
+          </button>
+        </section>
+      </div>
+    </section>
+  </main>
+</div>

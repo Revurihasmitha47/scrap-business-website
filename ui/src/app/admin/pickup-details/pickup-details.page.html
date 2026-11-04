@@ -1,0 +1,175 @@
+<div class="admin-shell">
+  <app-admin-sidebar
+    [activeView]="'pickups'"
+    (viewChange)="navigateToDashboard()"
+  >
+  </app-admin-sidebar>
+
+  <main class="admin-main">
+    <header class="admin-header">
+      <span>ScrapFlow</span>
+
+      <div class="admin-user">
+        <button
+          class="notification-button"
+          type="button"
+          aria-label="Notifications"
+        >
+          ♧
+          <i></i>
+        </button>
+
+        <button
+          class="profile-trigger"
+          type="button"
+          (click)="profileMenu = !profileMenu"
+        >
+          <span class="admin-avatar">{{ initials }}</span>
+          <strong>{{ auth.session?.fullName || 'Admin' }}</strong>
+          <span>⌄</span>
+        </button>
+
+        <div class="profile-menu" *ngIf="profileMenu">
+          <button type="button" (click)="openProfile()">Profile</button>
+          <button type="button" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="admin-content pickup-detail-content">
+      <div class="admin-page-title">
+        <div>
+          <p class="eyebrow">OPERATIONS</p>
+          <h1>Pickup Details</h1>
+        </div>
+
+        <button type="button" class="admin-back" (click)="navigateToPickups()">
+          ← Back
+        </button>
+      </div>
+
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+
+      <ng-container *ngIf="pickup; else loading">
+        <div class="pickup-detail-grid">
+          <section class="pickup-detail-card pickup-main-card">
+            <div class="pickup-detail-heading">
+              <div>
+                <p class="eyebrow">REQUEST</p>
+                <h2>#PR-{{ pickup.id | slice: 0:8 }}</h2>
+              </div>
+
+              <span
+                class="status-pill"
+                [class.status-green]="pickup.status === 'COMPLETED'"
+                [class.status-orange]="pickup.status !== 'COMPLETED'"
+              >
+                {{ prettyStatus(pickup.status) }}
+              </span>
+            </div>
+
+            <div class="pickup-facts-grid">
+              <div>
+                <span>Seller</span>
+                <strong>{{ pickup.seller_name || 'Seller' }}</strong>
+                <small
+                  >{{ pickup.seller_email || 'Email not available' }}</small
+                >
+              </div>
+              <div>
+                <span>Phone</span>
+                <strong>{{ pickup.seller_phone || 'Not available' }}</strong>
+              </div>
+              <div>
+                <span>Preferred pickup</span>
+                <strong>{{ pickup.preferred_date }}</strong>
+                <small>{{ pickup.preferred_time || 'Flexible time' }}</small>
+              </div>
+              <div>
+                <span>Estimated amount</span>
+                <strong>₹{{ pickup.estimated_amount || 0 }}</strong>
+              </div>
+            </div>
+
+            <div class="pickup-detail-section">
+              <h3>Pickup address</h3>
+              <p>{{ addressText(pickup.pickup_address) }}</p>
+            </div>
+
+            <div class="pickup-detail-section" *ngIf="pickup.seller_notes">
+              <h3>Seller notes</h3>
+              <p>{{ pickup.seller_notes }}</p>
+            </div>
+          </section>
+
+          <aside class="pickup-detail-card pickup-summary-card">
+            <h2>Request Summary</h2>
+
+            <div class="summary-row">
+              <span>Request ID</span>
+              <strong>#PR-{{ pickup.id | slice: 0:8 }}</strong>
+            </div>
+            <div class="summary-row">
+              <span>Current status</span>
+              <strong>{{ prettyStatus(pickup.status) }}</strong>
+            </div>
+            <div class="summary-row">
+              <span>Assigned staff</span>
+              <strong
+                >{{ pickup.assigned_staff_name || 'Not assigned' }}</strong
+              >
+            </div>
+            <div class="summary-row summary-total">
+              <span>Estimated amount</span>
+              <strong>₹{{ pickup.estimated_amount || 0 }}</strong>
+            </div>
+
+            <button
+              type="button"
+              class="detail-primary-button"
+              (click)="navigateToPickups()"
+            >
+              Back to Pickup Requests
+            </button>
+          </aside>
+        </div>
+
+        <section class="pickup-detail-card pickup-items-card">
+          <div class="pickup-detail-heading">
+            <div>
+              <p class="eyebrow">COLLECTION</p>
+              <h2>Scrap Items</h2>
+            </div>
+            <span>{{ items.length }} item(s)</span>
+          </div>
+
+          <div class="pickup-items-table pickup-items-header">
+            <span>Item</span>
+            <span>Estimated quantity</span>
+            <span>Rate</span>
+            <span>Amount</span>
+          </div>
+
+          <div class="pickup-items-table" *ngFor="let item of items">
+            <strong
+              >{{ item.category_name || item.name || 'Scrap item' }}</strong
+            >
+            <span>{{ item.estimated_quantity || 0 }} kg</span>
+            <span>₹{{ item.saved_rate || item.rate || 0 }}</span>
+            <strong>₹{{ item.estimated_amount || 0 }}</strong>
+          </div>
+
+          <p class="detail-empty" *ngIf="!items.length">
+            No scrap item details available.
+          </p>
+        </section>
+      </ng-container>
+
+      <ng-template #loading>
+        <section class="pickup-detail-card detail-loading">
+          {{ error || 'Loading pickup details...' }}
+        </section>
+      </ng-template>
+    </section>
+  </main>
+</div>

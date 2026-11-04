@@ -1,0 +1,42 @@
+<div class="seller-shell">
+  <app-seller-sidebar></app-seller-sidebar>
+  <main class="seller-main">
+    <app-seller-header></app-seller-header>
+    <section class="seller-content">
+      <div class="seller-title">
+        <div>
+          <p>SCRAPFLOW {{isBulk?'BULK SELLER':'HOME SELLER'}}</p>
+          <h1>{{isBulk?'Business & Profile':'My Profile'}}</h1>
+          <span>Manage your account details.</span>
+        </div>
+      </div>
+      <div class="seller-alert error" *ngIf="error">{{error}}</div>
+      <div class="seller-alert success" *ngIf="message">{{message}}</div>
+      <section class="seller-card" *ngIf="profile">
+        <div class="seller-card-head"><h2>Profile details</h2></div>
+        <div class="seller-form-grid">
+          <label
+            >Full name<input
+              [(ngModel)]="draft.fullName"
+              name="fullName" /></label
+          ><label>Email<input [value]="profile.email" disabled /></label
+          ><label
+            >Mobile number<input
+              [(ngModel)]="draft.phone"
+              name="phone" /></label
+          ><label>Account type<input [value]="sellerLabel" disabled /></label
+          ><label *ngIf="isBulk"
+            >Business name<input
+              [(ngModel)]="draft.businessName"
+              name="businessName" /></label
+          ><label *ngIf="isBulk"
+            >GSTIN<input [(ngModel)]="draft.gstin" name="gstin"
+          /></label>
+        </div>
+        <button class="seller-cta" [disabled]="saving" (click)="save()">
+          {{saving?'Saving...':'Save changes'}}
+        </button>
+      </section>
+    </section>
+  </main>
+</div>

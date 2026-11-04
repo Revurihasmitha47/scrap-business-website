@@ -1,0 +1,120 @@
+<div class="admin-shell">
+  <app-admin-sidebar
+    [activeView]="'staff'"
+    (viewChange)="navigateView($event)"
+  ></app-admin-sidebar>
+  <main class="admin-main">
+    <header class="admin-header">
+      <span>ScrapFlow</span>
+      <div class="admin-user">
+        <button class="notification-button" type="button">♧<i></i></button
+        ><button
+          class="profile-trigger"
+          type="button"
+          (click)="profileMenu = !profileMenu"
+        >
+          <span class="admin-avatar">{{ initials }}</span
+          ><strong>{{ auth.session?.fullName || 'Admin' }}</strong
+          ><span>⌄</span>
+        </button>
+        <div class="profile-menu" *ngIf="profileMenu">
+          <button type="button" (click)="openProfile()">Profile</button
+          ><button type="button" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+    <section class="admin-content add-staff-content">
+      <div class="admin-page-title add-staff-title">
+        <div>
+          <p class="eyebrow"></p>
+          <h1>Add Staff</h1>
+        </div>
+        <button type="button" class="admin-back" (click)="cancel()">←</button>
+      </div>
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+      <div class="alert success" *ngIf="token">
+        Invitation created. Development token: {{ token }}
+      </div>
+      <section class="staff-form-panel">
+        <div class="staff-form-heading">
+          <div>
+            <p class="eyebrow">STAFF</p>
+            <h2>Add New Staff</h2>
+          </div>
+          <button type="button" class="staff-close" (click)="cancel()">
+            ×
+          </button>
+        </div>
+        <form (ngSubmit)="submit()">
+          <label
+            >Full name <b>*</b
+            ><input
+              name="name"
+              [(ngModel)]="form.fullName"
+              required
+              placeholder="Enter full name" /></label
+          ><label
+            >Work email <b>*</b
+            ><input
+              type="email"
+              name="email"
+              [(ngModel)]="form.email"
+              required
+              placeholder="name@scrapflow.in"
+          /></label>
+          <div class="staff-form-grid">
+            <label
+              >Mobile number <b>*</b
+              ><input
+                name="mobile"
+                [(ngModel)]="form.mobile"
+                required
+                placeholder="+91 98765 43210" /></label
+            ><label
+              >Service area <b>*</b
+              ><input
+                name="area"
+                [(ngModel)]="form.serviceArea"
+                required
+                placeholder="Koramangala, Bengaluru"
+            /></label>
+          </div>
+          <label
+            >Account setup<select name="setup" [(ngModel)]="form.setup">
+              <option value="invite">Send invite link</option>
+              <option value="temporary">Temporary password</option>
+            </select></label
+          ><label *ngIf="form.setup === 'temporary'"
+            >Temporary password <b>*</b
+            ><input
+              type="password"
+              name="temporaryPassword"
+              [(ngModel)]="form.temporaryPassword"
+              minlength="8"
+              [required]="form.setup === 'temporary'"
+              placeholder="Minimum 8 characters" /></label
+          ><label class="staff-checkbox"
+            ><input
+              type="checkbox"
+              name="active"
+              [(ngModel)]="form.active"
+            /><span
+              ><strong>Active account</strong
+              ><small
+                >Staff member can log in and receive pickup assignments.</small
+              ></span
+            ></label
+          >
+          <div class="staff-form-actions">
+            <button type="button" class="outline-orange" (click)="cancel()">
+              Cancel</button
+            ><button type="submit" class="primary-button" [disabled]="saving">
+              {{ saving ? 'Creating...' : (form.setup === 'temporary' ? 'Create
+              Staff Account' : 'Create Invitation') }}
+            </button>
+          </div>
+        </form>
+      </section>
+    </section>
+  </main>
+</div>

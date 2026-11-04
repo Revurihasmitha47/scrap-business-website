@@ -1,0 +1,215 @@
+:host {
+  display: block;
+}
+.staff-content {
+  padding-top: 164px;
+}
+.category-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(23, 62, 51, 0.35);
+}
+.category-modal {
+  display: flex;
+  width: min(900px, calc(100vw - 40px));
+  max-height: calc(100vh - 60px);
+  padding: 0;
+  flex-direction: column;
+  overflow: auto;
+  border: 1px solid #dfeae1;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(23, 62, 51, 0.24);
+}
+.category-modal-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 28px;
+  border-bottom: 1px solid #e7ece8;
+}
+.category-modal-heading h2 {
+  margin: 0;
+  color: #123e32;
+}
+.category-modal-close {
+  border: 0;
+  color: #60776b;
+  background: transparent;
+  cursor: pointer;
+  font-size: 26px;
+}
+.staff-page-title {
+  justify-content: flex-start;
+  gap: 18px;
+}
+.staff-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+}
+.staff-card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  padding: 14px !important;
+}
+.staff-card-item {
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border: 1px solid #dfe7e1;
+  border-radius: 10px;
+  background: #fff;
+}
+.staff-card-body {
+  flex: 1;
+  padding: 18px;
+}
+.staff-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.staff-card-heading strong {
+  display: block;
+  color: #102f25;
+  font-size: 15px;
+}
+.staff-card-heading small {
+  display: block;
+  margin-top: 7px;
+  color: #71847a;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.staff-card-body p {
+  margin: 12px 0 0;
+  color: #61786d;
+  font-size: 12px;
+}
+.staff-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 57px;
+  padding: 0 18px;
+  border-top: 1px solid #e5ebe6;
+  color: #71847a;
+  font-size: 12px;
+}
+.staff-modal {
+  width: min(700px, calc(100vw - 40px));
+}
+.category-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 28px;
+  padding: 16px 0;
+  border-top: 1px solid #edf1ed;
+  color: #80948a;
+}
+.category-detail-row strong {
+  color: #244e3f;
+  text-align: right;
+}
+.category-modal-button {
+  align-self: flex-end;
+  margin: 20px 28px 28px;
+}
+.category-edit-field {
+  display: grid;
+  gap: 10px;
+  margin: 0 28px 20px;
+  color: #273f35;
+  font-size: 14px;
+  font-weight: 700;
+}
+.category-edit-field > span {
+  display: block;
+}
+.category-edit-field b {
+  color: #ef6338;
+}
+.category-modal-heading + .category-edit-field {
+  margin-top: 28px;
+}
+.category-edit-field input,
+.category-edit-field select {
+  min-height: 46px;
+  padding: 12px 16px;
+  border: 1px solid #cfddd2;
+  border-radius: 7px;
+  font: inherit;
+  background: #fff;
+}
+.category-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 20px 28px 24px;
+  border-top: 1px solid #e7ece8;
+}
+.staff-add-modal {
+  width: min(760px, calc(100vw - 40px));
+}
+.staff-add-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.staff-add-grid .category-edit-field {
+  margin-bottom: 0;
+}
+.staff-add-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 28px 20px;
+  color: #273f35;
+  font-size: 14px;
+}
+.staff-add-checkbox input {
+  margin-top: 3px;
+}
+.staff-add-checkbox small {
+  display: block;
+  margin-top: 4px;
+  color: #71847a;
+  font-size: 12px;
+}
+.staff-add-grid + .category-edit-field {
+  margin-top: 10px;
+}
+@media (max-width: 900px) {
+  .staff-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 650px) {
+  .staff-heading {
+    gap: 8px;
+  }
+  .staff-card-grid,
+  .staff-add-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .staff-heading .primary-button {
+    padding-inline: 14px;
+  }
+  .staff-add-checkbox {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+}

@@ -1,0 +1,291 @@
+<div class="admin-shell">
+  <app-admin-sidebar
+    [activeView]="'staff'"
+    (viewChange)="navigateView($event)"
+  ></app-admin-sidebar>
+  <main class="admin-main">
+    <header class="admin-header">
+      <span>ScrapFlow</span>
+      <div class="admin-user">
+        <button class="notification-button" type="button">♧<i></i></button
+        ><button
+          class="profile-trigger"
+          type="button"
+          (click)="profileMenu = !profileMenu"
+        >
+          <span class="admin-avatar">{{ initials }}</span
+          ><strong>{{ auth.session?.fullName || 'Admin' }}</strong
+          ><span>⌄</span>
+        </button>
+        <div class="profile-menu" *ngIf="profileMenu">
+          <button type="button" (click)="openProfile()">Profile</button
+          ><button type="button" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+    <section class="admin-content staff-content">
+      <div class="admin-page-title staff-page-title">
+        <div>
+          <p class="eyebrow"></p>
+          <h1>Staff</h1>
+        </div>
+        <div class="staff-heading">
+          <button type="button" class="primary-button" (click)="openAddStaff()">
+            Add Staff</button
+          ><button
+            type="button"
+            class="admin-back"
+            (click)="navigateView('dashboard')"
+          >
+            ←
+          </button>
+        </div>
+      </div>
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+      <div class="alert success" *ngIf="message">{{ message }}</div>
+      <section class="admin-card full-admin-card admin-list-page">
+        <app-query-bar
+          searchPlaceholder="Search staff by name, email or mobile..."
+          [searchValue]="search"
+          [filters]="filters"
+          [selectedFilter]="filter"
+          [viewMode]="viewMode"
+          (searchChange)="search = $event"
+          (filterChange)="filter = $event"
+          (viewModeChange)="viewMode = $event"
+        ></app-query-bar>
+        <app-cdn-table
+          [columns]="columns"
+          [rows]="filteredStaff"
+          [viewMode]="viewMode === 'table' ? 'list' : 'card'"
+          [pageSizeOptions]="[5, 10, 25]"
+          [pagination]="true"
+        >
+          <ng-template cdnTableCell="full_name" let-row
+            ><strong
+              >{{ row.full_name || 'Pending Staff' }}</strong
+            ></ng-template
+          ><ng-template cdnTableCell="phone" let-row
+            >{{ row.phone || '—' }}</ng-template
+          ><ng-template cdnTableCell="assigned_pickups" let-row
+            >{{ row.assigned_pickups || 0 }}</ng-template
+          ><ng-template cdnTableCell="account_status" let-row
+            ><span
+              class="status-pill"
+              [class.status-green]="row.account_status === 'ACTIVE'"
+              [class.status-orange]="row.account_status !== 'ACTIVE'"
+              >{{ displayStatus(row) }}</span
+            ></ng-template
+          ><ng-template cdnTableActions let-row
+            ><app-actions [items]="staffActions(row)"></app-actions
+          ></ng-template>
+          <ng-template cdnTableCard let-rows="rows"
+            ><div class="staff-card-grid">
+              <article class="staff-card-item" *ngFor="let row of rows">
+                <div class="staff-card-body">
+                  <div class="staff-card-heading">
+                    <div>
+                      <strong>{{ row.full_name || 'Pending Staff' }}</strong
+                      ><small>{{ row.email }}</small>
+                    </div>
+                    <span
+                      class="status-pill"
+                      [class.status-green]="row.account_status === 'ACTIVE'"
+                      [class.status-orange]="row.account_status !== 'ACTIVE'"
+                      >{{ displayStatus(row) }}</span
+                    >
+                  </div>
+                  <p>Mobile: {{ row.phone || '—' }}</p>
+                  <p>Assigned pickups: {{ row.assigned_pickups || 0 }}</p>
+                </div>
+                <div class="staff-card-footer">
+                  <span>Staff member</span
+                  ><app-actions [items]="staffActions(row)"></app-actions>
+                </div>
+              </article></div
+          ></ng-template>
+        </app-cdn-table>
+      </section>
+      <div
+        class="category-modal-backdrop"
+        *ngIf="selectedStaff"
+        (click)="closeStaff()"
+      >
+        <section
+          class="category-modal staff-modal"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="category-modal-heading">
+            <h2>{{ modalMode === 'view' ? 'Staff Details' : 'Edit Staff' }}</h2>
+            <button
+              type="button"
+              class="category-modal-close"
+              (click)="closeStaff()"
+            >
+              ×
+            </button>
+          </div>
+          <ng-container *ngIf="modalMode === 'view'; else editStaff"
+            ><div class="category-detail-row">
+              <span>Name</span
+              ><strong>{{ selectedStaff.full_name || 'Pending Staff' }}</strong>
+            </div>
+            <div class="category-detail-row">
+              <span>Email</span><strong>{{ selectedStaff.email }}</strong>
+            </div>
+            <div class="category-detail-row">
+              <span>Mobile</span
+              ><strong>{{ selectedStaff.phone || '—' }}</strong>
+            </div>
+            <div class="category-detail-row">
+              <span>Service area</span
+              ><strong>{{ selectedStaff.service_area || '—' }}</strong>
+            </div>
+            <div class="category-detail-row">
+              <span>Status</span
+              ><span class="status-pill status-green"
+                >{{ displayStatus(selectedStaff) }}</span
+              >
+            </div>
+            <button
+              type="button"
+              class="primary-button category-modal-button"
+              (click)="closeStaff()"
+            >
+              Close
+            </button></ng-container
+          ><ng-template #editStaff
+            ><label class="category-edit-field"
+              >Full name<input [(ngModel)]="editName" name="editName" /></label
+            ><label class="category-edit-field"
+              >Email<input
+                [ngModel]="editEmail"
+                name="editEmail"
+                disabled /></label
+            ><label class="category-edit-field"
+              >Mobile<input [(ngModel)]="editPhone" name="editPhone" /></label
+            ><label class="category-edit-field"
+              >Service area<input
+                [(ngModel)]="editArea"
+                name="editArea" /></label
+            ><label class="category-edit-field"
+              >Status<select [(ngModel)]="editActive" name="editActive">
+                <option [ngValue]="true">Active</option>
+                <option [ngValue]="false">Inactive</option>
+              </select></label
+            >
+            <div class="category-modal-actions">
+              <button
+                type="button"
+                class="outline-orange"
+                (click)="closeStaff()"
+              >
+                Cancel</button
+              ><button
+                type="button"
+                class="primary-button"
+                (click)="saveStaff()"
+              >
+                Save changes
+              </button>
+            </div></ng-template
+          >
+        </section>
+      </div>
+      <div
+        class="category-modal-backdrop"
+        *ngIf="addOpen"
+        (click)="closeAddStaff()"
+      >
+        <section
+          class="category-modal staff-add-modal"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="category-modal-heading">
+            <div>
+              <p class="eyebrow"></p>
+              <h2>Add New Staff</h2>
+            </div>
+            <button
+              type="button"
+              class="category-modal-close"
+              (click)="closeAddStaff()"
+            >
+              ×
+            </button>
+          </div>
+          <label class="category-edit-field"
+            ><span>Full name <b>*</b></span
+            ><input
+              [(ngModel)]="editName"
+              name="addName"
+              placeholder="Enter full name" /></label
+          ><label class="category-edit-field"
+            ><span>Work email <b>*</b></span
+            ><input
+              type="email"
+              [(ngModel)]="editEmail"
+              name="addEmail"
+              placeholder="name@scrapflow.in"
+          /></label>
+          <div class="staff-add-grid">
+            <label class="category-edit-field"
+              ><span>Mobile number <b>*</b></span
+              ><input
+                [(ngModel)]="editPhone"
+                name="addPhone"
+                placeholder="+91 98765 43210" /></label
+            ><label class="category-edit-field"
+              ><span>Service area <b>*</b></span
+              ><input
+                [(ngModel)]="editArea"
+                name="addArea"
+                placeholder="Koramangala, Bengaluru"
+            /></label>
+          </div>
+          <label class="category-edit-field"
+            ><span>Account setup</span
+            ><select [(ngModel)]="inviteMode" name="inviteMode">
+              <option value="invite">Send invite link</option>
+              <option value="temporary">Temporary password</option>
+            </select></label
+          ><label class="category-edit-field" *ngIf="inviteMode === 'temporary'"
+            ><span>Temporary password <b>*</b></span
+            ><input
+              type="password"
+              [(ngModel)]="temporaryPassword"
+              name="temporaryPassword"
+              placeholder="Minimum 8 characters" /></label
+          ><label class="staff-add-checkbox"
+            ><input
+              type="checkbox"
+              [(ngModel)]="editActive"
+              name="addActive"
+            /><span
+              ><strong>Active account</strong
+              ><small
+                >Staff member can log in and receive pickup assignments.</small
+              ></span
+            ></label
+          >
+          <div class="category-modal-actions">
+            <button
+              type="button"
+              class="outline-orange"
+              (click)="closeAddStaff()"
+            >
+              Cancel</button
+            ><button
+              type="button"
+              class="primary-button"
+              (click)="createStaff()"
+              [disabled]="saving"
+            >
+              {{ saving ? 'Creating...' : 'Add Staff' }}
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+</div>

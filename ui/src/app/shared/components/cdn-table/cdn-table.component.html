@@ -1,0 +1,68 @@
+<div
+  class="cms-table-shell"
+  *ngIf="viewMode === 'list'; else cards">
+  <div class="cms-table-row cms-table-head">
+    <span *ngFor="let column of columns">
+      {{ column.header }}
+    </span>
+    <span *ngIf="actions">Actions</span>
+  </div>
+
+  <div
+    class="cms-table-row"
+    *ngFor="let row of pagedRows; trackBy: trackByFn">
+    <span *ngFor="let column of columns">
+      <ng-container
+        *ngIf="cellMap.get(column.key) as template; else value">
+        <ng-container
+          *ngTemplateOutlet="template; context: { $implicit: row, row: row }">
+        </ng-container>
+      </ng-container>
+
+      <ng-template #value>
+        {{ getCell(column, row) || '-' }}
+      </ng-template>
+    </span>
+
+    <span *ngIf="actions">
+      <ng-container
+        *ngTemplateOutlet="actions.template; context: { $implicit: row, row: row }">
+      </ng-container>
+    </span>
+  </div>
+
+  <p
+    class="cms-table-empty"
+    *ngIf="!pagedRows.length">
+    {{ emptyMessage }}
+  </p>
+</div>
+
+<ng-template #cards>
+  <ng-container *ngIf="card; else basicCards">
+    <ng-container
+      *ngTemplateOutlet="card.template; context: { rows: pagedRows }">
+    </ng-container>
+  </ng-container>
+
+  <ng-template #basicCards>
+    <div class="cms-basic-cards">
+      <article
+        *ngFor="let row of pagedRows; trackBy: trackByFn">
+        <strong>{{ getCell(columns[0], row) }}</strong>
+        <span *ngFor="let column of columns.slice(1)">
+          {{ column.header }}: {{ getCell(column, row) || '-' }}
+        </span>
+      </article>
+    </div>
+  </ng-template>
+</ng-template>
+
+<app-pagination
+  [totalItems]="rows.length"
+  [currentPage]="currentPage"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="pageSizeOptions"
+  (pageChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)">
+</app-pagination>

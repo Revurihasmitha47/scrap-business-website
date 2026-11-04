@@ -1,0 +1,150 @@
+:host {
+  display: block;
+}
+
+.seller-header-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #49645a;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.seller-header-back svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.seller-header-user {
+  position: relative;
+  margin-left: auto;
+}
+
+.seller-notification-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  margin-right: 19px;
+  border: 1px solid #e6e8e1;
+  border-radius: 14px;
+  color: #13201b;
+  background: #fff;
+  cursor: pointer;
+}
+
+.seller-notification-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.seller-notification-button i {
+  position: absolute;
+  top: 10px;
+  right: 11px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff6335;
+}
+
+.seller-profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 13px 6px 7px;
+  border: 1px solid #e4e7df;
+  border-radius: 14px;
+  color: #17231e;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+.seller-avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: #fff;
+  background: #087345;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.seller-profile-trigger strong {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.seller-profile-trigger small {
+  color: #60756b;
+  font-size: 12px;
+}
+
+.seller-profile-chevron {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: #365043;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.seller-profile-menu {
+  position: absolute;
+  top: 58px;
+  right: 0;
+  z-index: 5;
+  width: 180px;
+  padding: 7px;
+  border: 1px solid #e3e9e1;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 14px 30px #173e3320;
+}
+
+.seller-profile-menu button {
+  width: 100%;
+  padding: 11px;
+  border: 0;
+  border-radius: 6px;
+  color: #365043;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.seller-profile-menu button:hover {
+  background: #f1f7ef;
+}
+
+@media (max-width: 760px) {
+  .seller-profile-trigger strong,
+  .seller-profile-trigger small {
+    display: none;
+  }
+
+  .seller-notification-button {
+    margin-right: 4px;
+  }
+}

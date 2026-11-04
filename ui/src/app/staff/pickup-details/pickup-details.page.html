@@ -1,0 +1,141 @@
+<div class="staff-shell">
+  <app-staff-sidebar />
+  <main class="staff-main">
+    <app-staff-header />
+    <section class="staff-content">
+      <div class="staff-detail-heading">
+        <div>
+          <span class="staff-eyebrow">TEAM OPERATIONS</span>
+          <h1>Pickup Details</h1>
+          <p *ngIf="pickup">
+            PR-{{ pickup.id.slice(0, 8) }} · {{ pickup.preferred_date }}
+          </p>
+        </div>
+        <app-actions *ngIf="pickup" [items]="actionItems()" />
+      </div>
+      <p class="staff-error" *ngIf="error">{{ error }}</p>
+      <ng-container *ngIf="pickup">
+        <section class="staff-detail-card">
+          <div class="staff-section-heading">
+            <div>
+              <span class="staff-eyebrow">WEIGHT & PAYMENT</span>
+              <h2>Collection Details</h2>
+            </div>
+            <span class="staff-status">{{ pickup.status }}</span>
+          </div>
+          <div class="staff-items-table staff-items-head">
+            <span>Category</span><span>Estimated kg</span><span>Actual kg</span
+            ><span>Rate / kg</span><span>Final amount</span>
+          </div>
+          <div class="staff-items-table" *ngFor="let item of items">
+            <strong>{{ item.category_name }}</strong
+            ><span>{{ item.estimated_quantity }}</span
+            ><input
+              type="number"
+              min="0"
+              step="0.01"
+              [(ngModel)]="weights[item.id]"
+              [disabled]="isFinalized"
+            /><span>₹{{ item.saved_rate }}</span><b>₹{{ itemFinal(item) }}</b>
+          </div>
+          <div class="staff-detail-total">
+            <strong>Total actual weight</strong><b>{{ actualTotal }} kg</b>
+          </div>
+          <div class="staff-detail-total">
+            <strong>Final amount</strong><b>₹{{ finalTotal }}</b>
+          </div>
+        </section>
+        <section class="staff-detail-card" *ngIf="!isFinalized">
+          <h2>Payment to Seller</h2>
+          <p>Final amount uses actual weight × saved rate snapshot.</p>
+          <div
+            class="staff-payment-row"
+            *ngFor="let row of paymentRows; let i = index"
+          >
+            <label
+              >Method<select [(ngModel)]="row.paymentMethod">
+                <option value="CASH">Cash</option>
+                <option value="UPI">UPI</option>
+                <option value="BANK_TRANSFER">Bank Transfer</option>
+              </select></label
+            ><label
+              >Amount<input
+                type="number"
+                min="0.01"
+                step="0.01"
+                [(ngModel)]="row.amount" /></label
+            ><label *ngIf="row.paymentMethod !== 'CASH'"
+              >Reference<input [(ngModel)]="row.reference" /></label
+            ><button
+              type="button"
+              *ngIf="paymentRows.length > 1"
+              (click)="removePayment(i)"
+            >
+              Remove
+            </button>
+          </div>
+          <button
+            class="staff-secondary-button"
+            type="button"
+            (click)="addPayment()"
+          >
+            + Add payment
+          </button>
+          <p>Entered: ₹{{ paymentTotal }} · Balance: ₹{{ balance }}</p>
+          <label class="staff-notes-label"
+            >Collection notes<textarea [(ngModel)]="notes"></textarea></label
+          ><label class="staff-confirm"
+            ><input type="checkbox" [(ngModel)]="confirmed" /> I confirm the
+            collection and payment details</label
+          ><button
+            class="staff-primary-button"
+            [disabled]="!confirmed || saving"
+            (click)="complete()"
+          >
+            {{ saving ? 'Saving...' : 'Complete Pickup' }}
+          </button>
+        </section>
+        <section class="staff-detail-card" *ngIf="isFinalized">
+          <h2>Payment to Seller</h2>
+          <div class="staff-detail-total">
+            <strong>Amount paid</strong><b>₹{{ pickup.amount_paid || 0 }}</b>
+          </div>
+          <div class="staff-detail-total">
+            <strong>Remaining balance</strong
+            ><b>₹{{ pickup.payment_balance || 0 }}</b>
+          </div>
+          <p>Status: {{ pickup.payment_status || 'UNPAID' }}</p>
+          <button
+            class="staff-primary-button"
+            *ngIf="hasRemainingBalance"
+            (click)="showRemaining = true"
+          >
+            + Pay Remaining
+          </button>
+          <div class="staff-payment-row" *ngIf="showRemaining">
+            <label
+              >Method<select [(ngModel)]="remainingPayment.paymentMethod">
+                <option value="CASH">Cash</option>
+                <option value="UPI">UPI</option>
+                <option value="BANK_TRANSFER">Bank Transfer</option>
+              </select></label
+            ><label
+              >Amount<input
+                type="number"
+                min="0.01"
+                [max]="pickup.payment_balance"
+                [(ngModel)]="remainingPayment.amount" /></label
+            ><button
+              class="staff-primary-button"
+              [disabled]="saving"
+              (click)="payRemaining()"
+            >
+              Record payment
+            </button>
+          </div>
+        </section>
+      </ng-container>
+      <p *ngIf="!pickup && !error">Loading pickup details...</p>
+    </section>
+  </main>
+</div>

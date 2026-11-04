@@ -33,7 +33,7 @@ public class AdminOperationsController {
             "activeStaff", count("select count(*) from profiles where account_type='STAFF' and account_status='ACTIVE'"),
             "homeSellers", count("select count(*) from profiles where account_type='HOME_SELLER'"),
             "bulkSellers", count("select count(*) from profiles where account_type='BULK_SELLER'"),
-            "recentRequests", jdbc.queryForList("select p.id,p.status,p.preferred_date,p.preferred_time,p.estimated_amount,s.full_name seller_name,s.account_type seller_type from pickup_requests p join profiles s on s.id=p.seller_id order by p.created_at desc limit 6"),
+            "recentRequests", jdbc.queryForList("select p.id,p.status,p.preferred_date,p.preferred_time,p.estimated_amount,(select coalesce(sum(i.estimated_quantity),0) from pickup_items i where i.pickup_id=p.id) estimated_weight,s.full_name seller_name,s.account_type seller_type from pickup_requests p join profiles s on s.id=p.seller_id order by p.created_at desc limit 6"),
             "staffOverview", jdbc.queryForList("select id,full_name,account_status,availability_status from profiles where account_type='STAFF' order by full_name limit 8"),
             "rateOverview", jdbc.queryForList("select c.id,c.name,r.home_seller_rate,r.bulk_seller_rate,r.effective_from from scrap_categories c left join lateral (select home_seller_rate,bulk_seller_rate,effective_from from scrap_rates where category_id=c.id and effective_from <= now() order by effective_from desc limit 1) r on true where c.is_active=true order by c.name")
         );

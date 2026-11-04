@@ -1,0 +1,103 @@
+<div class="seller-shell">
+  <app-seller-sidebar></app-seller-sidebar>
+
+  <main class="seller-main">
+    <app-seller-header></app-seller-header>
+
+    <section class="seller-content seller-data-page">
+      <div class="seller-title">
+        <div>
+          <p>SCRAPFLOW {{ isBulk ? "BULK SELLER" : "HOME SELLER" }}</p>
+          <h1>Current Scrap Rates</h1>
+          <span>View the rates applicable to your seller account.</span>
+        </div>
+      </div>
+
+      <div class="seller-alert error" *ngIf="error">{{ error }}</div>
+
+      <section class="seller-card seller-data-card">
+        <div class="seller-card-head seller-data-heading">
+          <div>
+            <h2>{{ sellerLabel }} rates</h2>
+            <p>
+              Only active categories and rates for your account type are shown.
+            </p>
+          </div>
+          <span class="seller-muted">Rates are read-only</span>
+        </div>
+
+        <app-query-bar
+          searchPlaceholder="Search rates or categories..."
+          [searchValue]="search"
+          [filters]="filters"
+          [selectedFilter]="filter"
+          [viewMode]="viewMode"
+          (searchChange)="search = $event"
+          (filterChange)="filter = $event"
+          (viewModeChange)="viewMode = $event"
+        ></app-query-bar>
+
+        <app-cdn-table
+          [columns]="columns"
+          [rows]="filteredRates"
+          [loading]="loading"
+          [viewMode]="viewMode === 'table' ? 'list' : 'card'"
+          [pageSizeOptions]="[5, 10, 25]"
+          emptyMessage="No current rates found."
+        >
+          <ng-template cdnTableCell="name" let-row>
+            <strong>{{ row.name }}</strong>
+          </ng-template>
+
+          <ng-template cdnTableCell="rate" let-row>
+            <strong class="rate-value"
+              >₹{{ row.rate | number: "1.0-2" }}</strong
+            >
+          </ng-template>
+
+          <ng-template cdnTableCell="effective_from" let-row>
+            {{ row.effective_from ? (row.effective_from | date: "mediumDate") :
+            "Active" }}
+          </ng-template>
+
+          <ng-template cdnTableCell="status" let-row>
+            <span
+              class="seller-pill"
+              [class.seller-pill-inactive]="row.is_active === false"
+            >
+              {{ row.is_active === false ? "Inactive" : "Active" }}
+            </span>
+          </ng-template>
+
+          <ng-template cdnTableCard let-rows="rows">
+            <div class="seller-rate-card-grid">
+              <article class="seller-rate-card" *ngFor="let row of rows">
+                <div class="seller-rate-card-heading">
+                  <strong>{{ row.name }}</strong>
+                  <span class="seller-pill"
+                    >{{ row.is_active === false ? "Inactive" : "Active" }}</span
+                  >
+                </div>
+                <div class="seller-rate-card-value">
+                  <small>Current rate</small>
+                  <strong>₹{{ row.rate | number: "1.0-2" }} / kg</strong>
+                </div>
+                <div class="seller-rate-card-footer">
+                  <span>Effective from</span>
+                  <strong
+                    >{{ row.effective_from ? (row.effective_from | date:
+                    "mediumDate") : "Active" }}</strong
+                  >
+                </div>
+              </article>
+            </div>
+          </ng-template>
+        </app-cdn-table>
+
+        <div class="seller-empty" *ngIf="!loading && !filteredRates.length">
+          No active rates are available yet.
+        </div>
+      </section>
+    </section>
+  </main>
+</div>

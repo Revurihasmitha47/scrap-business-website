@@ -1,0 +1,49 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - link "↗ ScrapFlow" [ref=e4] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=e5]:
+      - link "Register" [ref=e6] [cursor=pointer]:
+        - /url: /register
+      - link "Admin registration" [ref=e7] [cursor=pointer]:
+        - /url: /admin/register
+      - link "Sign in" [ref=e8] [cursor=pointer]:
+        - /url: /sign-in
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - paragraph [ref=e13]: THE SMARTER WAY TO RECYCLE
+          - heading "Give your scrap a second life." [level=1] [ref=e14]
+          - paragraph [ref=e15]: ScrapFlow connects sellers, collection teams, and scrap businesses in one clear workspace.
+          - generic [ref=e16]:
+            - link "Create seller account ↗" [ref=e17] [cursor=pointer]:
+              - /url: /register
+              - text: Create seller account
+              - generic [ref=e18]: ↗
+            - link "Set up Admin access" [ref=e19] [cursor=pointer]:
+              - /url: /admin/register
+          - generic [ref=e20]:
+            - generic [ref=e21]: ✓ Transparent rates
+            - generic [ref=e22]: ✓ Doorstep pickup
+            - generic [ref=e23]: ✓ Secure records
+        - generic [ref=e24]:
+          - generic [ref=e26]:
+            - generic [ref=e27]: SCRAPFLOW
+            - strong [ref=e28]: Responsible recovery.
+            - generic [ref=e29]: Simple for sellers. Clear for teams.
+          - generic [ref=e30]: ✦
+          - generic [ref=e31]: ✦
+      - generic [ref=e32]:
+        - article [ref=e33]:
+          - text: "01"
+          - heading "Register your way" [level=3] [ref=e34]
+          - paragraph [ref=e35]: Home and Bulk Sellers have a focused registration path.
+        - article [ref=e36]:
+          - text: "02"
+          - heading "Keep it moving" [level=3] [ref=e37]
+          - paragraph [ref=e38]: Follow every pickup from request to collection.
+        - article [ref=e39]:
+          - text: "03"
+          - heading "Know the value" [level=3] [ref=e40]
+          - paragraph [ref=e41]: See the right rates and final amount clearly.

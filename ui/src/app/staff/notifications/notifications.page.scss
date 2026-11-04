@@ -1,0 +1,121 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+.staff-shell {
+  min-height: 100vh;
+  background: #f4f7fb;
+}
+.staff-main {
+  min-height: 100vh;
+  margin-left: 253px;
+}
+.staff-content {
+  padding: 40px 48px 70px;
+}
+.staff-page-heading {
+  margin-bottom: 27px;
+}
+.staff-page-heading h1 {
+  margin: 7px 0 4px;
+  color: #092b2a;
+  font-size: 36px;
+}
+.staff-page-heading p {
+  margin: 0;
+  color: #58736c;
+}
+.staff-eyebrow {
+  color: #ff6333;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+.staff-notification-card {
+  padding: 8px 20px;
+  border: 1px solid #dce5e0;
+  border-radius: 16px;
+  background: #fff;
+}
+.staff-notification-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 8px;
+  border: 0;
+  border-bottom: 1px solid #e6eee8;
+  color: #12332b;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+.staff-notification-row:last-of-type {
+  border-bottom: 0;
+}
+.staff-notification-row.unread {
+  background: #fffaf7;
+}
+.staff-notification-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  color: #087345;
+  background: #def5e6;
+}
+.staff-notification-icon svg {
+  width: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.staff-notification-row > span:nth-child(2) {
+  flex: 1;
+}
+.staff-notification-row strong,
+.staff-notification-row small,
+.staff-notification-row em {
+  display: block;
+}
+.staff-notification-row small {
+  margin-top: 4px;
+  color: #58736c;
+}
+.staff-notification-row em {
+  margin-top: 6px;
+  color: #82958d;
+  font-size: 11px;
+  font-style: normal;
+}
+.staff-notification-row b {
+  color: #ff6333;
+  font-size: 11px;
+}
+.staff-empty,
+.staff-error {
+  padding: 20px;
+  color: #58736c;
+}
+.staff-error {
+  color: #b52d28;
+}
+@media (max-width: 1000px) {
+  .staff-main {
+    margin-left: 70px;
+  }
+  .staff-content {
+    padding: 28px 20px;
+  }
+}
+@media (max-width: 650px) {
+  .staff-content {
+    padding: 22px 12px;
+  }
+  .staff-notification-card {
+    padding: 6px 12px;
+  }
+}

@@ -1,0 +1,332 @@
+<div class="seller-shell request-workspace">
+  <app-seller-sidebar></app-seller-sidebar>
+
+  <main class="seller-main">
+    <app-seller-header></app-seller-header>
+
+    <section class="seller-content request-content">
+      <header class="request-page-heading">
+        <div>
+          <p>SCRAPFLOW · {{ sellerLabel | uppercase }}</p>
+          <h1>{{ isBulk ? 'Request a Bulk Pickup' : 'Request a Home Pickup' }}</h1>
+          <span>
+            {{ isBulk
+              ? 'Add all scrap types and preferred collection details.'
+              : 'Tell us what scrap you’d like collected.' }}
+          </span>
+        </div>
+      </header>
+
+      <div class="seller-alert error" *ngIf="error" role="alert">
+        {{ error }}
+      </div>
+
+      <div class="seller-alert success" *ngIf="message" role="status">
+        {{ message }}
+      </div>
+
+      <div class="request-layout">
+        <div class="request-main">
+
+          <section class="request-section" *ngIf="isBulk">
+            <div class="request-section-heading">
+              <h2>Business Details</h2>
+            </div>
+
+            <div class="request-business-grid">
+              <label>
+                <span class="field-label">Business Name</span>
+                <input [value]="profile?.business_name || 'Not provided'" readonly>
+              </label>
+
+              <label>
+                <span class="field-label">
+                  GSTIN <span class="optional-label">(Optional)</span>
+                </span>
+                <input
+                  [(ngModel)]="form.gstin"
+                  name="gstin"
+                  placeholder="Enter GSTIN">
+              </label>
+            </div>
+
+            <p class="request-hint">
+              Business details are loaded from your profile.
+            </p>
+          </section>
+
+          <section class="request-section">
+            <div class="request-section-heading">
+              <h2>{{ isBulk ? 'Collection Details' : '1. Pickup Details' }}</h2>
+            </div>
+
+            <div class="request-form-grid">
+              <label [class.wide]="isBulk">
+                <span class="field-label">Pickup Address <b>*</b></span>
+                <textarea
+                  [(ngModel)]="form.address"
+                  name="address"
+                  required
+                  placeholder="Enter your complete pickup address">
+                </textarea>
+                <small>Enter the address where our team should collect the scrap.</small>
+              </label>
+
+              <label *ngIf="!isBulk">
+                <span class="field-label">
+                  Landmark <span class="optional-label">(Optional)</span>
+                </span>
+                <input
+                  [(ngModel)]="form.landmark"
+                  name="landmark"
+                  placeholder="Nearby landmark">
+                <small>Help our team find your address easily.</small>
+              </label>
+
+              <label *ngIf="isBulk">
+                <span class="field-label">Contact Person <b>*</b></span>
+                <input
+                  [(ngModel)]="form.contactPerson"
+                  name="contactPerson"
+                  required
+                  placeholder="Contact person name">
+              </label>
+
+              <label *ngIf="isBulk">
+                <span class="field-label">Mobile Number <b>*</b></span>
+                <input
+                  [(ngModel)]="form.contactMobile"
+                  name="contactMobile"
+                  type="tel"
+                  required
+                  placeholder="Contact mobile number">
+              </label>
+
+              <label>
+                <span class="field-label">Preferred Date <b>*</b></span>
+                <input
+                  [(ngModel)]="form.date"
+                  name="date"
+                  type="date"
+                  [min]="minDate"
+                  required>
+                <small>Select a convenient date for pickup.</small>
+              </label>
+
+              <label>
+                <span class="field-label">Preferred Time <b>*</b></span>
+                <select [(ngModel)]="form.time" name="time" required>
+                  <option value="">Select a time slot</option>
+                  <option *ngFor="let slot of timeSlots" [value]="slot">
+                    {{ slot }}
+                  </option>
+                </select>
+                <small>Select a preferred time slot.</small>
+              </label>
+            </div>
+
+            <div class="recurring-note" *ngIf="isBulk">
+              Recurring pickups are not available yet. Submit a separate request
+              for each collection.
+            </div>
+          </section>
+
+          <section class="request-section">
+            <div class="request-section-heading">
+              <div>
+                <h2>{{ isBulk ? 'Scrap Items' : '2. Scrap Items' }}</h2>
+                <p>
+                  Add the scrap types and quantities. Rates shown are current
+                  <em>{{ sellerLabel }} rates.</em>
+                </p>
+              </div>
+              <span class="rate-live">● Live rates</span>
+            </div>
+
+            <div class="request-items-scroll">
+              <div class="request-items-head">
+                <span>#</span>
+                <span>Scrap Category <b>*</b></span>
+                <span>Estimated Quantity <b>*</b></span>
+                <span>{{ sellerLabel }} Rate (₹/kg)</span>
+                <span>Estimated Amount (₹)</span>
+                <span>Action</span>
+              </div>
+
+              <div class="request-item-row" *ngFor="let item of form.items; let i = index">
+                <span class="item-number">{{ i + 1 }}</span>
+
+                <select [(ngModel)]="item.categoryId" [name]="'category' + i">
+                  <option value="">Choose category</option>
+                  <option *ngFor="let category of categories" [value]="category.id">
+                    {{ category.name }}
+                  </option>
+                </select>
+
+                <div class="quantity-input">
+                  <input
+                    [(ngModel)]="item.quantity"
+                    [name]="'quantity' + i"
+                    type="number"
+                    min="0.01"
+                    max="10000000"
+                    step="0.01"
+                    placeholder="0">
+                  <span>kg</span>
+                </div>
+
+                <input
+                  class="readonly-rate"
+                  [value]="itemRate(item) | currency:'INR':'symbol':'1.0-2'"
+                  readonly
+                  aria-label="Current rate">
+
+                <strong class="line-amount">
+                  {{ lineAmount(item) | currency:'INR':'symbol':'1.0-2' }}
+                </strong>
+
+                <button
+                  class="remove-item"
+                  type="button"
+                  (click)="removeItem(i)"
+                  [disabled]="form.items.length === 1"
+                  aria-label="Remove scrap item">
+                  ×
+                </button>
+              </div>
+            </div>
+
+            <button class="add-item-button" type="button" (click)="addItem()">
+              <span>＋</span>
+              {{ isBulk ? 'Add Scrap Item' : 'Add another item' }}
+            </button>
+
+            <p class="request-validation" *ngIf="validationHint">
+              <b>ⓘ</b> {{ validationHint }}
+            </p>
+          </section>
+
+          <section class="request-section additional-section">
+            <div class="request-section-heading">
+              <h2>
+                {{ isBulk ? 'Additional Information' : '3. Additional Information' }}
+                <span>(Optional)</span>
+              </h2>
+            </div>
+
+            <label class="notes-field">
+              <span class="field-label">Notes for Pickup Team</span>
+              <textarea
+                [(ngModel)]="form.notes"
+                name="notes"
+                placeholder="Add access instructions, special handling, or other details...">
+              </textarea>
+              <small>Any special instructions or access details.</small>
+            </label>
+
+            <div class="photo-upload-box">
+              <label for="pickupPhotos">
+                Upload Photos <span>(Optional)</span>
+              </label>
+
+              <div class="upload-drop-area">
+                <span class="upload-icon">⇧</span>
+                <div>
+                  <strong>Choose photos to upload</strong>
+                  <small>JPG, PNG or WEBP · Up to 5 MB each · Maximum 5 photos</small>
+                </div>
+                <input
+                  id="pickupPhotos"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  (change)="onPhotosSelected($event)">
+              </div>
+
+              <div class="photo-list" *ngIf="photos.length">
+                <span *ngFor="let photo of photos">
+                  {{ photo.name }}
+                  <button
+                    type="button"
+                    (click)="removePhoto(photo)"
+                    aria-label="Remove photo">
+                    ×
+                  </button>
+                </span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="request-summary">
+          <section class="summary-intro">
+            <span class="summary-icon">♧</span>
+            <div>
+              <h2>Pickup Summary</h2>
+              <p>
+                Here’s an estimate based on current
+                <b>{{ sellerLabel }} rates.</b>
+              </p>
+            </div>
+          </section>
+
+          <div class="summary-table">
+            <div class="summary-table-head">
+              <span>Item</span>
+              <span>Quantity</span>
+              <span>Rate</span>
+              <span>Amount</span>
+            </div>
+
+            <div class="summary-row" *ngFor="let item of form.items">
+              <span>{{ categoryName(item) }}</span>
+              <span>{{ item.quantity || 0 }} kg</span>
+              <span>{{ itemRate(item) | currency:'INR':'symbol':'1.0-2' }}</span>
+              <b>{{ lineAmount(item) | currency:'INR':'symbol':'1.0-2' }}</b>
+            </div>
+          </div>
+
+          <div class="summary-total">
+            <span>Estimated Total Weight</span>
+            <b>{{ estimatedWeight | number:'1.0-2' }} kg</b>
+          </div>
+
+          <div class="summary-total amount">
+            <span>Estimated Total</span>
+            <b>{{ estimatedAmount | currency:'INR':'symbol':'1.0-2' }}</b>
+          </div>
+
+          <div class="snapshot-note">
+            <b>ⓘ</b>
+            <span>Final amount depends on the actual collected weight and saved rate.</span>
+          </div>
+
+          <button
+            class="submit-request-button"
+            type="button"
+            [disabled]="saving || !categories.length"
+            (click)="submitRequest()">
+            {{ saving ? 'Submitting…' : '➤  Submit Pickup Request' }}
+          </button>
+
+          <button
+            class="save-draft-button"
+            type="button"
+            (click)="saveDraft()">
+            ▤ &nbsp; Save Draft
+          </button>
+
+          <div class="summary-important">
+            <b>✓ &nbsp; Important</b>
+            <ul>
+              <li>Pickup address and date are required.</li>
+              <li>Select at least one scrap category.</li>
+              <li>Enter a positive quantity for each item.</li>
+              <li>Final amount depends on actual collected weight.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+</div>

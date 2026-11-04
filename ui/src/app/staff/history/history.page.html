@@ -1,0 +1,81 @@
+<div class="staff-shell">
+  <app-staff-sidebar />
+  <main class="staff-main">
+    <app-staff-header />
+    <section class="staff-content">
+      <div class="staff-page-heading">
+        <h1>Pickup History</h1>
+        <p>Your completed and unable-to-collect pickups</p>
+      </div>
+      <section class="staff-table-card">
+        <div class="staff-section-heading">
+          <div>
+            <h2>All Pickup History</h2>
+            <p>{{ filteredHistory.length }} record(s)</p>
+          </div>
+        </div>
+        <app-query-bar
+          [searchValue]="search"
+          searchPlaceholder="Search by seller or request..."
+          [filters]="filters"
+          [selectedFilter]="selectedStatus"
+          [viewMode]="viewMode"
+          (searchChange)="search = $event"
+          (filterChange)="selectedStatus = $event"
+          (viewModeChange)="viewMode = $event"
+        />
+        <p class="staff-error" *ngIf="error">{{ error }}</p>
+        <app-cdn-table
+          [columns]="columns"
+          [rows]="filteredHistory"
+          [viewMode]="viewMode === 'table' ? 'list' : 'card'"
+          emptyMessage="No pickup history found."
+        >
+          <ng-template cdnTableCell="status" let-row
+            ><span class="staff-status done"
+              >{{ pretty(row.status) }}</span
+            ></ng-template
+          >
+          <ng-template cdnTableActions let-row
+            ><app-actions [items]="historyActions(row)"
+          /></ng-template>
+          <ng-template cdnTableCard let-rows="rows"
+            ><div class="staff-pickup-cards">
+              <article class="staff-pickup-card" *ngFor="let row of rows">
+                <div class="staff-card-top">
+                  <span class="staff-seller-avatar"
+                    >{{ (row.seller_name || 'S')[0] }}</span
+                  >
+                  <div>
+                    <strong>{{ row.seller_name || 'Seller' }}</strong
+                    ><small>PR-{{ row.id.slice(0, 8) }}</small>
+                  </div>
+                  <span class="staff-status done"
+                    >{{ pretty(row.status) }}</span
+                  >
+                </div>
+                <div class="staff-card-facts">
+                  <span
+                    ><small>Date</small
+                    ><strong>{{ row.preferred_date }}</strong></span
+                  ><span
+                    ><small>Actual weight</small
+                    ><strong>{{ row.actual_weight || 0 }} kg</strong></span
+                  ><span
+                    ><small>Amount</small
+                    ><strong
+                      >₹{{ row.actual_amount || row.estimated_amount || 0
+                      }}</strong
+                    ></span
+                  >
+                </div>
+                <div class="staff-card-actions">
+                  <app-actions [items]="historyActions(row)" />
+                </div>
+              </article></div
+          ></ng-template>
+        </app-cdn-table>
+      </section>
+    </section>
+  </main>
+</div>

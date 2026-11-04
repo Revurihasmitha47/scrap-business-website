@@ -1,0 +1,85 @@
+:host {
+  display: block;
+}
+
+.admin-list-page {
+  width: 100%;
+}
+
+.admin-list-heading {
+  align-items: flex-start;
+}
+
+.admin-list-heading h2 {
+  margin-bottom: 8px;
+}
+
+.admin-list-heading p:last-child {
+  margin-bottom: 0;
+}
+
+.request-code {
+  color: #1675bd;
+  font-weight: 700;
+}
+
+.seller-email {
+  color: #60776b;
+  overflow-wrap: anywhere;
+}
+
+.cms-basic-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.cms-basic-cards article {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  min-height: 150px;
+  padding: 20px;
+  border: 1px solid #d9eee1;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(23, 62, 51, 0.06);
+}
+
+.cms-basic-cards article:hover {
+  border-color: #9ed8b8;
+  box-shadow: 0 10px 24px rgba(23, 62, 51, 0.1);
+}
+
+.cms-basic-cards article strong {
+  color: #173e33;
+  font-size: 15px;
+}
+
+.cms-basic-cards article > span:not(.status-pill) {
+  color: #5d7568;
+  font-size: 13px;
+}
+
+.cms-basic-cards app-actions {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+.cms-basic-cards .status-pill {
+  width: fit-content;
+}
+
+@media (max-width: 720px) {
+  .cms-basic-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-footer {
+  padding: 32px 0 12px;
+  color: #5d7088;
+  text-align: center;
+}

@@ -1,0 +1,124 @@
+<div class="staff-shell">
+  <app-staff-sidebar />
+  <main class="staff-main">
+    <app-staff-header />
+    <section class="staff-content">
+      <div class="staff-page-heading">
+        <div>
+          <h1>My Pickups</h1>
+          <p>Your assigned pickup requests for today</p>
+        </div>
+      </div>
+
+      <div class="staff-summary-grid">
+        <article class="staff-summary-card green">
+          <span>✦</span>
+          <div>
+            <small>Assigned Today</small><strong>{{ assignedToday }}</strong>
+            <p>Pickups allocated to you</p>
+          </div>
+        </article>
+        <article class="staff-summary-card success">
+          <span>✓</span>
+          <div>
+            <small>Completed</small><strong>{{ completed }}</strong>
+            <p>Successfully completed</p>
+          </div>
+        </article>
+        <article class="staff-summary-card orange">
+          <span>✦</span>
+          <div>
+            <small>In Progress</small><strong>{{ inProgress }}</strong>
+            <p>Currently in progress</p>
+          </div>
+        </article>
+        <article class="staff-summary-card red">
+          <span>✦</span>
+          <div>
+            <small>Remaining</small><strong>{{ remaining }}</strong>
+            <p>Yet to be completed</p>
+          </div>
+        </article>
+      </div>
+
+      <section class="staff-table-card">
+        <div class="staff-section-heading">
+          <div>
+            <h2>My Assigned Pickups</h2>
+            <p>{{ pickups.length }} assigned pickup(s)</p>
+          </div>
+        </div>
+        <app-query-bar
+          [searchValue]="search"
+          searchPlaceholder="Search by seller name or address..."
+          [filters]="filters"
+          [selectedFilter]="selectedStatus"
+          [viewMode]="viewMode"
+          (searchChange)="onSearch($event)"
+          (filterChange)="onStatus($event)"
+          (viewModeChange)="viewMode = $event"
+        />
+
+        <p class="staff-error" *ngIf="error">{{ error }}</p>
+        <app-cdn-table
+          [columns]="columns"
+          [rows]="pickups"
+          [viewMode]="viewMode === 'table' ? 'list' : 'card'"
+          [pageSize]="10"
+          emptyMessage="No pickups are assigned to you."
+        >
+          <ng-template cdnTableCell="seller_name" let-row
+            >{{ row.seller_name || 'Seller' }}</ng-template
+          >
+          <ng-template cdnTableCell="status" let-row
+            ><span
+              class="staff-status"
+              [class.done]="row.status === 'COLLECTED' || row.status === 'COMPLETED'"
+              >{{ pretty(row.status) }}</span
+            ></ng-template
+          >
+          <ng-template cdnTableActions let-row
+            ><app-actions [items]="pickupActions(row)"
+          /></ng-template>
+          <ng-template cdnTableCard let-rows="rows">
+            <div class="staff-pickup-cards">
+              <article class="staff-pickup-card" *ngFor="let row of rows">
+                <div class="staff-card-top">
+                  <span class="staff-seller-avatar"
+                    >{{ initialsFor(row.seller_name) }}</span
+                  >
+                  <div>
+                    <strong>{{ row.seller_name || 'Seller' }}</strong
+                    ><small>{{ pretty(row.seller_type || '') }}</small>
+                  </div>
+                  <span
+                    class="staff-status"
+                    [class.done]="row.status === 'COLLECTED' || row.status === 'COMPLETED'"
+                    >{{ pretty(row.status) }}</span
+                  >
+                </div>
+                <div class="staff-card-facts">
+                  <span
+                    ><small>Address</small
+                    ><strong
+                      >{{ addressText(row.pickup_address) }}</strong
+                    ></span
+                  ><span
+                    ><small>Pickup date</small
+                    ><strong>{{ row.preferred_date }}</strong></span
+                  ><span
+                    ><small>Amount</small
+                    ><strong>₹{{ row.estimated_amount || 0 }}</strong></span
+                  >
+                </div>
+                <div class="staff-card-actions">
+                  <app-actions [items]="pickupActions(row)" />
+                </div>
+              </article>
+            </div>
+          </ng-template>
+        </app-cdn-table>
+      </section>
+    </section>
+  </main>
+</div>

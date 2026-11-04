@@ -1,0 +1,34 @@
+<div class="seller-shell">
+  <app-seller-sidebar></app-seller-sidebar>
+  <main class="seller-main">
+    <app-seller-header></app-seller-header>
+    <section class="seller-content">
+      <div class="seller-title">
+        <div>
+          <p>SCRAPFLOW {{isBulk?'BULK SELLER':'HOME SELLER'}} WORKSPACE</p>
+          <h1>Notifications</h1>
+          <span>Updates about your pickup requests</span>
+        </div>
+      </div>
+      <section class="seller-card">
+        <div
+          class="seller-notification"
+          *ngFor="let n of notifications"
+          [class.unread]="!n.is_read"
+          (click)="read(n)"
+        >
+          <span>♧</span>
+          <div>
+            <b>{{n.title}}</b>
+            <p>{{n.message}}</p>
+            <small>{{n.created_at|date:'medium'}}</small>
+          </div>
+          <em *ngIf="!n.is_read">New</em>
+        </div>
+        <div class="seller-empty" *ngIf="!notifications.length">
+          No notifications yet.
+        </div>
+      </section>
+    </section>
+  </main>
+</div>

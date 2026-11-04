@@ -1,0 +1,63 @@
+<aside class="seller-sidebar">
+  <nav aria-label="Seller navigation">
+    <a
+      routerLink="/seller/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <span class="seller-nav-icon"
+        ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('dashboard')" /></svg
+      ></span>
+      <span>Dashboard</span>
+    </a>
+    <a routerLink="/seller/rates" routerLinkActive="active">
+      <span class="seller-nav-icon"
+        ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('rates')" /></svg
+      ></span>
+      <span>Current Rates</span>
+    </a>
+    <a routerLink="/seller/request" routerLinkActive="active">
+      <span class="seller-nav-icon"
+        ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('requests')" /></svg
+      ></span>
+      <span>{{ isBulk ? "Request Bulk Pickup" : "Request Pickup" }}</span>
+    </a>
+    <a routerLink="/seller/requests" routerLinkActive="active">
+      <span class="seller-nav-icon"
+        ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('requests')" /></svg
+      ></span>
+      <span>My Requests</span>
+    </a>
+    <a routerLink="/seller/history" routerLinkActive="active">
+      <span class="seller-nav-icon"
+        ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('history')" /></svg
+      ></span>
+      <span>Pickup History</span>
+    </a>
+    <a *ngIf="isBulk" routerLink="/seller/profile" routerLinkActive="active">
+      <span class="seller-nav-icon"
+        ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('profile')" /></svg
+      ></span>
+      <span>Business Profile</span>
+    </a>
+    <a routerLink="/seller/notifications" routerLinkActive="active">
+      <span class="seller-nav-icon"
+        ><svg viewBox="0 0 24 24">
+          <path [attr.d]="iconPath('notifications')" /></svg
+      ></span>
+      <span>Notifications</span>
+    </a>
+    <a routerLink="/seller/profile" routerLinkActive="active">
+      <span class="seller-nav-icon"
+        ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('profile')" /></svg
+      ></span>
+      <span>Profile</span>
+    </a>
+  </nav>
+  <button class="seller-logout" type="button" (click)="logout()">
+    <span class="seller-nav-icon"
+      ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('logout')" /></svg
+    ></span>
+    <span>Logout</span>
+  </button>
+</aside>

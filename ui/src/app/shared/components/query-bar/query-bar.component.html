@@ -1,0 +1,58 @@
+<div class="cms-querybar">
+  <label class="cms-querybar__search">
+    <span>⌕</span>
+    <input
+      [ngModel]="searchValue"
+      (ngModelChange)="searchChange.emit($event)"
+      [placeholder]="searchPlaceholder">
+  </label>
+
+  <button
+    type="button"
+    class="cms-querybar__filter-btn"
+    (click)="toggleFilters($event)">
+    ⚙ Filters
+  </button>
+
+  <div
+    class="cms-querybar__panel"
+    *ngIf="filterOpen"
+    [ngStyle]="filterPanelStyle">
+    <label>
+      Status
+      <select
+        [ngModel]="selectedFilter"
+        (ngModelChange)="filterChange.emit($event)">
+        <option value="">All</option>
+        <option
+          *ngFor="let filter of filters"
+          [value]="filter.value">
+          {{ filter.label }}
+        </option>
+      </select>
+    </label>
+
+    <button
+      type="button"
+      (click)="filterChange.emit(''); filterOpen = false">
+      Clear
+    </button>
+  </div>
+
+  <span class="cms-querybar__spacer"></span>
+
+  <div class="cms-querybar__toggle">
+    <button
+      type="button"
+      [class.active]="viewMode === 'table'"
+      (click)="viewModeChange.emit('table')">
+      ☷
+    </button>
+    <button
+      type="button"
+      [class.active]="viewMode === 'card'"
+      (click)="viewModeChange.emit('card')">
+      ▦
+    </button>
+  </div>
+</div>

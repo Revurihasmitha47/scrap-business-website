@@ -1,0 +1,200 @@
+<div class="seller-shell">
+  <app-seller-sidebar></app-seller-sidebar>
+
+  <main class="seller-main">
+    <app-seller-header backLink="/seller/requests"></app-seller-header>
+
+    <section class="seller-content pickup-detail-page" *ngIf="pickup">
+      <header class="detail-page-heading">
+        <div>
+          <p class="detail-eyebrow">{{ pretty(pickup.seller_type) }} WORKSPACE</p>
+          <h1>Pickup Details</h1>
+          <span>
+            Request ID: PR-{{ pickup.id | slice: 0:8 }}
+          </span>
+        </div>
+
+        <span class="detail-status" [ngClass]="statusClass(pickup.status)">
+          {{ pretty(pickup.status) }}
+        </span>
+      </header>
+
+      <div class="detail-alert" *ngIf="error" role="alert">
+        {{ error }}
+      </div>
+
+      <div class="pickup-detail-grid">
+        <div class="detail-main-column">
+
+          <section class="detail-card">
+            <div class="detail-card-heading">
+              <div>
+                <p class="detail-eyebrow">REQUEST INFORMATION</p>
+                <h2>Pickup Summary</h2>
+              </div>
+            </div>
+
+            <div class="summary-facts">
+              <div class="summary-fact">
+                <span>Pickup Date &amp; Time</span>
+                <strong>{{ pickup.preferred_date | date:'MMM d, y' }}</strong>
+                <small>{{ pickup.preferred_time || 'Flexible' }}</small>
+              </div>
+
+              <div class="summary-fact address-fact">
+                <span>Pickup Address</span>
+                <strong>{{ addressText(pickup.pickup_address) }}</strong>
+              </div>
+
+              <div class="summary-fact">
+                <span>Request Status</span>
+                <strong>{{ pretty(pickup.status) }}</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="detail-card">
+            <div class="detail-card-heading">
+              <div>
+                <p class="detail-eyebrow">WEIGHT &amp; PAYMENT</p>
+                <h2>Collection Details</h2>
+              </div>
+              <span class="detail-count">{{ items.length }} item(s)</span>
+            </div>
+
+            <div class="items-table-scroll">
+              <div class="detail-items-table detail-items-head">
+                <span>Category</span>
+                <span>Estimated (kg)</span>
+                <span>Actual (kg)</span>
+                <span>Rate / kg</span>
+                <span>Final Amount</span>
+              </div>
+
+              <div class="detail-items-table detail-item-row" *ngFor="let item of items">
+                <strong>{{ item.category_name || 'Scrap item' }}</strong>
+                <span>{{ item.estimated_quantity }} kg</span>
+                <span>{{ item.actual_weight == null ? '—' : item.actual_weight + ' kg' }}</span>
+                <span>{{ item.saved_rate | currency:'INR':'symbol':'1.0-2' }}</span>
+                <strong class="item-final-amount">
+                  {{ item.final_amount == null
+                    ? '—'
+                    : (item.final_amount | currency:'INR':'symbol':'1.0-2') }}
+                </strong>
+              </div>
+
+              <div class="detail-empty-row" *ngIf="!items.length">
+                No scrap item details are available for this request.
+              </div>
+            </div>
+
+            <div class="amount-summary">
+              <div class="amount-line estimated-line">
+                <span>Estimated Amount</span>
+                <strong>{{ pickup.estimated_amount || 0 | currency:'INR':'symbol':'1.0-2' }}</strong>
+              </div>
+
+              <ng-container *ngIf="pickup.actual_amount != null">
+                <div class="amount-line final-line">
+                  <span>Final Amount</span>
+                  <strong>{{ pickup.actual_amount | currency:'INR':'symbol':'1.0-2' }}</strong>
+                </div>
+
+                <div class="payment-breakdown">
+                  <div>
+                    <span>Amount Received</span>
+                    <strong>{{ pickup.amount_paid || 0 | currency:'INR':'symbol':'1.0-2' }}</strong>
+                  </div>
+                  <div>
+                    <span>Remaining Balance</span>
+                    <strong>{{ pickup.payment_balance || 0 | currency:'INR':'symbol':'1.0-2' }}</strong>
+                  </div>
+                  <div>
+                    <span>Payment Status</span>
+                    <strong class="payment-status">{{ pretty(pickup.payment_status || 'UNPAID') }}</strong>
+                  </div>
+                  <div>
+                    <span>Payment Method</span>
+                    <strong>{{ pretty(pickup.payment_method || 'Not recorded') }}</strong>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </section>
+
+          <section class="detail-card">
+            <div class="detail-card-heading">
+              <div>
+                <p class="detail-eyebrow">YOUR INSTRUCTIONS</p>
+                <h2>Seller Notes</h2>
+              </div>
+            </div>
+            <p class="seller-note">
+              {{ pickup.seller_notes || 'No notes were added to this pickup request.' }}
+            </p>
+          </section>
+        </div>
+
+        <aside class="detail-side-column">
+          <section class="detail-card timeline-card">
+            <div class="detail-card-heading">
+              <div>
+                <p class="detail-eyebrow">REQUEST PROGRESS</p>
+                <h2>Status Timeline</h2>
+              </div>
+            </div>
+
+            <div class="status-timeline" *ngIf="history.length; else noHistory">
+              <div class="timeline-entry" *ngFor="let event of history">
+                <span class="timeline-marker"></span>
+                <div class="timeline-content">
+                  <strong>{{ pretty(event.status) }}</strong>
+                  <small>
+                    {{ event.created_at | date:'MMM d, y, h:mm a' }}
+                  </small>
+                  <small>Updated by {{ event.changed_by || 'System' }}</small>
+                  <p *ngIf="event.reason">{{ event.reason }}</p>
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noHistory>
+              <p class="timeline-empty">No status updates are available yet.</p>
+            </ng-template>
+          </section>
+
+          <section class="detail-card cancel-card" *ngIf="canCancel">
+            <p class="detail-eyebrow">CHANGE YOUR REQUEST</p>
+            <h2>Cancel Pickup</h2>
+            <p class="cancel-description">
+              Enter a reason before cancelling this request.
+            </p>
+
+            <form (ngSubmit)="cancel()" novalidate>
+              <label for="cancelReason">Cancellation reason</label>
+              <textarea
+                id="cancelReason"
+                name="cancelReason"
+                [(ngModel)]="cancelReason"
+                placeholder="Tell us why you need to cancel">
+              </textarea>
+
+              <button class="seller-danger" type="submit" [disabled]="saving">
+                {{ saving ? 'Cancelling…' : 'Cancel Pickup Request' }}
+              </button>
+            </form>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <div class="detail-loading" *ngIf="!pickup && !error">
+      <span class="loading-spinner"></span>
+      <p>Loading pickup details…</p>
+    </div>
+
+    <div class="detail-alert page-error" *ngIf="error && !pickup" role="alert">
+      {{ error }}
+    </div>
+  </main>
+</div>

@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+.seller-data-card {
+  padding: 20px;
+}
+
+.seller-data-heading {
+  align-items: flex-start;
+}
+
+.seller-data-heading p {
+  margin: 7px 0 0;
+  color: #7d9288;
+  font-size: 12px;
+}
+
+.seller-rate-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding: 10px;
+}
+
+.seller-rate-card {
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid #d9eee1;
+  border-radius: 10px;
+  color: #60756b;
+}
+
+.seller-rate-card-heading,
+.seller-rate-card-footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.seller-rate-card-heading strong {
+  color: #173e33;
+  font-size: 15px;
+}
+
+.seller-rate-card-value {
+  display: grid;
+  gap: 7px;
+}
+
+.seller-rate-card-value small,
+.seller-rate-card-footer span {
+  color: #82958b;
+  font-size: 11px;
+}
+
+.seller-rate-card-value strong {
+  color: #f26636;
+  font-size: 18px;
+}
+
+.seller-rate-card-footer {
+  padding-top: 12px;
+  border-top: 1px solid #edf0eb;
+  font-size: 12px;
+}
+
+.seller-rate-card-footer strong {
+  color: #355c4c;
+  text-align: right;
+}
+
+.seller-pill-inactive {
+  color: #bf682c;
+  background: #fff0d8;
+}
+
+@media (max-width: 900px) {
+  .seller-rate-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .seller-rate-card-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,151 @@
+<div class="admin-shell">
+  <app-admin-sidebar
+    [activeView]="'rates'"
+    (viewChange)="navigateView($event)"
+  ></app-admin-sidebar>
+  <main class="admin-main">
+    <header class="admin-header">
+      <span>ScrapFlow</span>
+      <div class="admin-user">
+        <button class="notification-button" type="button">♧<i></i></button
+        ><button
+          class="profile-trigger"
+          type="button"
+          (click)="profileMenu = !profileMenu"
+        >
+          <span class="admin-avatar">{{ initials }}</span
+          ><strong>{{ auth.session?.fullName || 'Admin' }}</strong
+          ><span>⌄</span>
+        </button>
+        <div class="profile-menu" *ngIf="profileMenu">
+          <button type="button" (click)="openProfile()">Profile</button
+          ><button type="button" (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+    <section class="admin-content rates-content">
+      <div class="admin-page-title rates-page-title">
+        <div>
+          <p class="eyebrow"></p>
+          <h1>Scrap Rates</h1>
+        </div>
+        <div class="rates-heading">
+          <button type="button" class="primary-button" (click)="openAdd()">
+            Add Rate</button
+          ><button
+            type="button"
+            class="admin-back"
+            (click)="navigateView('dashboard')"
+          >
+            ←
+          </button>
+        </div>
+      </div>
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+      <div class="alert success" *ngIf="message">{{ message }}</div>
+      <section class="admin-card full-admin-card admin-list-page">
+        <app-query-bar
+          searchPlaceholder="Search rates..."
+          [searchValue]="search"
+          [filters]="filters"
+          [selectedFilter]="filter"
+          [viewMode]="viewMode"
+          (searchChange)="search = $event"
+          (filterChange)="filter = $event"
+          (viewModeChange)="viewMode = $event"
+        ></app-query-bar>
+        <app-cdn-table
+          [columns]="columns"
+          [rows]="filteredRates"
+          [viewMode]="viewMode === 'table' ? 'list' : 'card'"
+          [pageSizeOptions]="[5, 10, 25]"
+          [pagination]="true"
+        >
+          <ng-template cdnTableCell="name" let-row
+            ><strong>{{ row.name }}</strong></ng-template
+          ><ng-template cdnTableCell="home_seller_rate" let-row
+            >₹ {{ row.home_seller_rate ?? '—' }}</ng-template
+          ><ng-template cdnTableCell="bulk_seller_rate" let-row
+            >₹ {{ row.bulk_seller_rate ?? '—' }}</ng-template
+          ><ng-template cdnTableCell="effective_from" let-row
+            >{{ row.effective_from | date:'dd-MM-yyyy' }}</ng-template
+          ><ng-template cdnTableActions let-row
+            ><app-actions [items]="rateActions(row)"></app-actions
+          ></ng-template>
+          <ng-template cdnTableCard let-rows="rows"
+            ><div class="cms-basic-cards rate-card-grid">
+              <article class="rate-card" *ngFor="let row of rows">
+                <div>
+                  <strong>{{ row.name }}</strong
+                  ><span class="status-pill status-green">Published</span>
+                </div>
+                <p>Home Seller: ₹ {{ row.home_seller_rate ?? '—' }}</p>
+                <p>Bulk Seller: ₹ {{ row.bulk_seller_rate ?? '—' }}</p>
+                <footer>
+                  <span>Rate</span
+                  ><app-actions [items]="rateActions(row)"></app-actions>
+                </footer>
+              </article></div
+          ></ng-template>
+        </app-cdn-table>
+      </section>
+      <div
+        class="category-modal-backdrop"
+        *ngIf="modalOpen"
+        (click)="closeModal()"
+      >
+        <section
+          class="category-modal rate-modal"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="category-modal-heading">
+            <div>
+              <p class="eyebrow">SCRAP RATE</p>
+              <h2>
+                {{ selectedRate ? 'Edit Scrap Rate' : 'Add New Scrap Rate' }}
+              </h2>
+            </div>
+            <button
+              type="button"
+              class="category-modal-close"
+              (click)="closeModal()"
+            >
+              ×
+            </button>
+          </div>
+          <label class="category-edit-field rate-field"
+            >Category<select
+              [(ngModel)]="rateCategoryId"
+              name="rateCategoryId"
+              [disabled]="!!selectedRate"
+            >
+              <option value="">Choose category</option>
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select></label
+          ><label class="category-edit-field rate-field"
+            >Home Seller rate<input
+              type="number"
+              [(ngModel)]="homeRate"
+              name="homeRate"
+              min=".01" /></label
+          ><label class="category-edit-field rate-field"
+            >Bulk Seller rate<input
+              type="number"
+              [(ngModel)]="bulkRate"
+              name="bulkRate"
+              min=".01"
+          /></label>
+          <div class="category-modal-actions">
+            <button type="button" class="outline-orange" (click)="closeModal()">
+              Cancel</button
+            ><button type="button" class="primary-button" (click)="saveRate()">
+              {{ selectedRate ? 'Save changes' : 'Add Rate' }}
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+</div>

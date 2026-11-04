@@ -1,0 +1,25 @@
+<div
+  class="cms-actions"
+  (click)="$event.stopPropagation()">
+  <button
+    type="button"
+    class="cms-actions__button"
+    aria-label="Actions"
+    (click)="toggle($event)">
+    ⋮
+  </button>
+
+  <div
+    class="cms-actions__menu"
+    *ngIf="open"
+    [ngStyle]="menuStyle">
+    <button
+      type="button"
+      *ngFor="let item of items"
+      (click)="choose(item)"
+      [style.color]="item.color || null">
+      <span>{{ item.icon || '•' }}</span>
+      {{ item.label }}
+    </button>
+  </div>
+</div>

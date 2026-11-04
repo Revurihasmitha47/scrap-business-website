@@ -1,0 +1,216 @@
+:host {
+  display: block;
+}
+.categories-page-title {
+  justify-content: flex-start;
+  gap: 18px;
+}
+.categories-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+.categories-heading > p {
+  margin: 0;
+}
+.category-form {
+  display: flex;
+  gap: 10px;
+}
+.category-form input {
+  width: 220px;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #cfddd2;
+  border-radius: 7px;
+  font: inherit;
+}
+.category-form button {
+  min-width: 70px;
+}
+/* Card mode should remain a compact CMS-style grid, not a long vertical list. */
+.category-card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  padding: 14px !important;
+}
+.category-card-grid .category-card {
+  display: flex;
+  min-height: 164px;
+  padding: 0 !important;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border: 1px solid #dfe7e1;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(23, 62, 51, 0.05);
+}
+.category-card-body {
+  flex: 1;
+  padding: 16px;
+}
+.category-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.category-card-heading strong {
+  color: #102f25;
+  font-size: 15px;
+}
+.category-card-heading .status-pill {
+  flex: 0 0 auto;
+}
+.category-card-body p {
+  margin: 10px 0 0;
+  color: #72857b;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.category-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 57px;
+  padding: 0 16px;
+  border-top: 1px solid #e5ebe6;
+  color: #71847a;
+  font-size: 12px;
+}
+@media (max-width: 1100px) {
+  .category-card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 760px) {
+  .categories-heading {
+    align-items: stretch;
+    flex-direction: column;
+    margin-left: 0;
+  }
+  .category-form input {
+    width: 100%;
+  }
+  .category-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 480px) {
+  .category-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.category-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(23, 62, 51, 0.35);
+}
+.category-modal {
+  display: flex;
+  width: min(900px, calc(100vw - 40px));
+  max-height: calc(100vh - 60px);
+  padding: 0;
+  flex-direction: column;
+  border: 1px solid #dfeae1;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(23, 62, 51, 0.24);
+  overflow: auto;
+}
+.category-modal-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  padding: 24px 28px;
+  border-bottom: 1px solid #e7ece8;
+}
+.category-modal-heading h2 {
+  margin: 0;
+  color: #123e32;
+}
+.category-modal-close {
+  border: 0;
+  color: #60776b;
+  background: transparent;
+  cursor: pointer;
+  font-size: 26px;
+}
+.category-detail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 28px;
+  padding: 16px 0;
+  border-top: 1px solid #edf1ed;
+  color: #80948a;
+}
+.category-detail-row strong {
+  color: #244e3f;
+}
+.category-modal-button {
+  align-self: flex-end;
+  margin: 20px 28px 28px;
+}
+.category-edit-field {
+  display: grid;
+  gap: 10px;
+  margin: 0 28px 20px;
+  color: #273f35;
+  font-size: 14px;
+  font-weight: 700;
+}
+.category-modal-heading + .category-edit-field {
+  margin-top: 28px;
+}
+.category-edit-field input,
+.category-edit-field textarea,
+.category-edit-field select {
+  min-height: 46px;
+  padding: 12px 16px;
+  border: 1px solid #cfddd2;
+  border-radius: 7px;
+  font: inherit;
+  background: #fff;
+}
+.category-edit-field textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+.category-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+  padding: 20px 28px 24px;
+  border-top: 1px solid #e7ece8;
+}
+@media (max-width: 600px) {
+  .category-modal {
+    width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+  }
+  .category-modal-heading,
+  .category-modal-actions {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .category-edit-field,
+  .category-detail-row {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+  .category-modal-button {
+    margin-right: 18px;
+  }
+}

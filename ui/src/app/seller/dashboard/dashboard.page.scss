@@ -1,0 +1,916 @@
+:host {
+  display: block;
+}
+
+.seller-dashboard-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 145px;
+  margin-bottom: 24px;
+  padding: 20px 26px;
+  overflow: hidden;
+  border: 1px solid #e9eee6;
+  border-radius: 15px;
+  background: linear-gradient(100deg, #fff 58%, #f2f8ee);
+}
+
+.seller-dashboard-eyebrow {
+  margin: 0 0 8px;
+  color: #f47743;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.7px;
+}
+
+.seller-dashboard-welcome h2 {
+  margin: 0;
+  color: #123c30;
+  font-size: 27px;
+}
+
+.seller-dashboard-welcome p:last-child {
+  margin: 6px 0 0;
+  color: #72867c;
+  font-size: 13px;
+}
+
+.seller-welcome-illustration {
+  width: 235px;
+  height: 135px;
+}
+
+.seller-welcome-illustration svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.seller-dashboard-section {
+  margin-bottom: 20px;
+}
+
+.seller-dashboard-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.seller-dashboard-section-heading h2 {
+  margin: 0;
+  color: #183f33;
+  font-size: 19px;
+}
+
+.seller-dashboard-section-heading h2 span {
+  color: #72867c;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.seller-dashboard-section-heading a {
+  color: #4484a0;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.seller-dashboard-rate-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.seller-dashboard-rate-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 103px;
+  padding: 16px;
+  border: 1px solid #e9ece5;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 5px 16px #173e3308;
+}
+
+.seller-dashboard-rate-icon {
+  display: grid;
+  flex: 0 0 58px;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+}
+
+.seller-dashboard-rate-icon svg {
+  width: 27px;
+  height: 27px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.rate-icon-blue {
+  color: #1680ac;
+  background: #e5f5fb;
+}
+
+.rate-icon-green {
+  color: #188450;
+  background: #e7f7e9;
+}
+
+.rate-icon-orange {
+  color: #dc6427;
+  background: #fff0df;
+}
+
+.seller-dashboard-rate-info {
+  display: grid;
+  gap: 4px;
+}
+
+.seller-dashboard-rate-info strong {
+  color: #425d52;
+  font-size: 12px;
+}
+
+.seller-dashboard-rate-info b {
+  color: #173b30;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.seller-dashboard-rate-info small {
+  color: #82948b;
+  font-size: 10px;
+}
+
+.seller-dashboard-request-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  min-height: 57px;
+  margin: 17px 0 22px;
+  border-radius: 10px;
+  color: #fff;
+  background: linear-gradient(90deg, #fb6736, #fa5729);
+  box-shadow: 0 8px 18px #fb612633;
+  text-decoration: none;
+}
+
+.seller-dashboard-status {
+  padding: 17px 18px 8px;
+}
+
+.seller-dashboard-pickup-table {
+  overflow-x: auto;
+}
+
+.seller-dashboard-pickup-head,
+.seller-dashboard-pickup-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 9px;
+}
+
+.seller-dashboard-pickup-head {
+  border-bottom: 1px solid #e9eee8;
+  color: #73877d;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.seller-dashboard-pickup-row {
+  border-bottom: 1px solid #eef1ec;
+  color: #4d675b;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.seller-dashboard-pickup-row:hover {
+  background: #f8fbf7;
+}
+
+.seller-dashboard-pickup-row strong {
+  color: #204b3b;
+}
+
+@media (max-width: 900px) {
+  .seller-dashboard-rate-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .seller-dashboard-welcome {
+    min-height: 120px;
+    padding: 17px;
+  }
+
+  .seller-dashboard-welcome h2 {
+    font-size: 21px;
+  }
+
+  .seller-welcome-illustration {
+    width: 125px;
+    opacity: 0.8;
+  }
+
+  .seller-dashboard-rate-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .seller-dashboard-pickup-table {
+    min-width: 570px;
+  }
+}
+
+.seller-dashboard-shell {
+  display: flex;
+  min-height: 100vh;
+  color: #173a30;
+  background: #fbfaf6;
+}
+
+.seller-dashboard-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 10;
+  display: flex;
+  flex: 0 0 218px;
+  flex-direction: column;
+  width: 218px;
+  padding: 25px 12px 20px;
+  color: #e9f5e9;
+  background: linear-gradient(180deg, #004432, #003b2b);
+}
+
+.dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px 34px;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.dashboard-brand > span:last-child > span {
+  color: #f47743;
+}
+
+.brand-leaf {
+  color: #8bd46f;
+  font-size: 27px;
+}
+
+.seller-dashboard-sidebar nav {
+  display: grid;
+  gap: 7px;
+}
+
+.seller-dashboard-sidebar nav a,
+.seller-dashboard-sidebar nav button,
+.dashboard-logout {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 13px 14px;
+  border: 0;
+  border-radius: 9px;
+  color: #d2e5d5;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.seller-dashboard-sidebar nav a:hover,
+.seller-dashboard-sidebar nav button:hover,
+.seller-dashboard-sidebar nav a.active {
+  color: #fff;
+  background: #1b654f;
+}
+
+.seller-dashboard-sidebar nav a.active {
+  border-left: 4px solid #f47743;
+  padding-left: 10px;
+  font-weight: 800;
+}
+
+.nav-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  color: #e9f5e9;
+  font-size: 17px;
+}
+
+.dashboard-logout {
+  margin-top: auto;
+  border-top: 1px solid #ffffff2b;
+  border-radius: 0;
+  padding-top: 20px;
+}
+
+.seller-dashboard-main {
+  min-width: 0;
+  width: calc(100% - 218px);
+  margin-left: 218px;
+}
+
+.dashboard-topbar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 78px;
+  padding: 12px 34px;
+  border-bottom: 1px solid #e9ede6;
+  background: #fff;
+}
+
+.dashboard-topbar h1 {
+  margin: 0;
+  color: #113d31;
+  font-size: 25px;
+  font-weight: 850;
+  letter-spacing: -0.6px;
+}
+
+.dashboard-topbar h1 span {
+  color: #f26636;
+}
+
+.dashboard-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.notification-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e3e9e2;
+  border-radius: 50%;
+  color: #163e32;
+  background: #fff;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.notification-button i {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f35b3e;
+}
+
+.profile-menu-wrap {
+  position: relative;
+}
+
+.dashboard-profile-button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 10px 5px 5px;
+  border: 1px solid #e3e9e2;
+  border-radius: 24px;
+  color: #25483b;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dashboard-avatar {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  color: #fff;
+  background: #08734e;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.profile-chevron {
+  color: #71867c;
+}
+
+.dashboard-profile-menu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 7px;
+  width: 190px;
+  padding: 12px;
+  border: 1px solid #e2e9e1;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 14px 30px #173e3320;
+}
+
+.dashboard-profile-menu strong,
+.dashboard-profile-menu a,
+.dashboard-profile-menu button {
+  padding: 9px;
+  border: 0;
+  border-radius: 6px;
+  color: #315648;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  text-decoration: none;
+}
+
+.dashboard-profile-menu a:hover,
+.dashboard-profile-menu button:hover {
+  background: #f1f7ef;
+  cursor: pointer;
+}
+
+.seller-dashboard-content {
+  width: min(100%, 1370px);
+  margin: 0 auto;
+  padding: 28px 34px 50px;
+}
+
+.dashboard-welcome {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 145px;
+  margin-bottom: 22px;
+  padding: 20px 26px;
+  overflow: hidden;
+  border: 1px solid #e9eee6;
+  border-radius: 15px;
+  background: linear-gradient(100deg, #fff 58%, #f2f8ee);
+}
+
+.dashboard-eyebrow {
+  margin: 0 0 8px;
+  color: #f47743;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.7px;
+}
+
+.dashboard-welcome h2 {
+  margin: 0;
+  color: #123c30;
+  font-size: 27px;
+  letter-spacing: -0.6px;
+}
+
+.dashboard-welcome p:last-child {
+  margin: 6px 0 0;
+  color: #72867c;
+  font-size: 13px;
+}
+
+.welcome-illustration {
+  width: 235px;
+  height: 135px;
+  margin-right: 5px;
+}
+
+.welcome-illustration svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dashboard-error {
+  margin-bottom: 15px;
+  padding: 12px 14px;
+  border: 1px solid #f1d0ca;
+  border-radius: 8px;
+  color: #9e382d;
+  background: #fff3f0;
+  font-size: 12px;
+}
+
+.rates-section,
+.pickup-status-section {
+  margin-bottom: 19px;
+}
+
+.dashboard-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 11px;
+}
+
+.dashboard-section-heading h2 {
+  margin: 0;
+  color: #183f33;
+  font-size: 19px;
+}
+
+.dashboard-section-heading h2 span {
+  color: #72867c;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dashboard-section-heading a {
+  color: #4484a0;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dashboard-section-heading a:hover {
+  color: #f26636;
+}
+
+.dashboard-section-heading a span {
+  margin-left: 4px;
+}
+
+.rate-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.rate-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 103px;
+  padding: 16px;
+  border: 1px solid #e9ece5;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 5px 16px #173e3308;
+}
+
+.rate-icon {
+  display: grid;
+  flex: 0 0 58px;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  color: #1680ac;
+  background: #e5f5fb;
+  font-size: 27px;
+}
+
+.rate-icon-1 {
+  color: #188450;
+  background: #e7f7e9;
+}
+
+.rate-icon-2 {
+  color: #dc6427;
+  background: #fff0df;
+}
+
+.rate-info {
+  display: grid;
+  gap: 4px;
+}
+
+.rate-name {
+  color: #425d52;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rate-info strong {
+  color: #173b30;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.rate-info small {
+  color: #82948b;
+  font-size: 10px;
+}
+
+.request-pickup-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  min-height: 57px;
+  margin: 17px 0 22px;
+  border-radius: 10px;
+  color: #fff;
+  background: linear-gradient(90deg, #fb6736, #fa5729);
+  box-shadow: 0 8px 18px #fb612633;
+  text-decoration: none;
+}
+
+.request-pickup-cta:hover {
+  background: #e95325;
+}
+
+.request-pickup-cta strong {
+  font-size: 15px;
+}
+
+.cta-icon,
+.cta-arrow {
+  font-size: 19px;
+}
+
+.pickup-status-section {
+  padding: 17px 18px 8px;
+  border: 1px solid #e8ece5;
+  border-radius: 13px;
+  background: #fff;
+  box-shadow: 0 5px 16px #173e3308;
+}
+
+.pickup-table-head,
+.pickup-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 9px;
+}
+
+.pickup-table-head {
+  border-bottom: 1px solid #e9eee8;
+  color: #73877d;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.pickup-row {
+  border-bottom: 1px solid #eef1ec;
+  color: #4d675b;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.pickup-row:last-child {
+  border-bottom: 0;
+}
+
+.pickup-row:hover {
+  background: #f8fbf7;
+}
+
+.pickup-row > strong {
+  color: #204b3b;
+  font-size: 12px;
+}
+
+.pickup-status {
+  justify-self: start;
+  padding: 6px 10px;
+  border-radius: 14px;
+  color: #256aa2;
+  background: #e8f2ff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.pickup-status.status-completed {
+  color: #187346;
+  background: #e4f6e8;
+}
+
+.pickup-status.status-cancelled,
+.pickup-status.status-rejected {
+  color: #a43c35;
+  background: #fff0ed;
+}
+
+.pickup-status.status-on-the-way,
+.pickup-status.status-assigned {
+  color: #a45c0b;
+  background: #fff2dc;
+}
+
+.dashboard-empty {
+  padding: 22px;
+  border: 1px dashed #d7e2d7;
+  border-radius: 9px;
+  color: #71867b;
+  background: #fbfdf9;
+  font-size: 12px;
+  text-align: center;
+}
+
+.dashboard-empty p {
+  margin: 0 0 9px;
+}
+
+.dashboard-empty a {
+  color: #ee6232;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.help-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: #09251c80;
+}
+
+.help-dialog {
+  position: relative;
+  width: min(420px, 100%);
+  padding: 25px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 20px 50px #001d1460;
+}
+
+.help-dialog h2 {
+  margin: 0 0 10px;
+  color: #123c30;
+}
+
+.help-dialog p {
+  color: #62786d;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.help-dialog a {
+  color: #e85f31;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.help-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  border: 0;
+  color: #62786d;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .seller-dashboard-sidebar {
+    width: 190px;
+    flex-basis: 190px;
+  }
+
+  .seller-dashboard-main {
+    width: calc(100% - 190px);
+    margin-left: 190px;
+  }
+
+  .seller-dashboard-content {
+    padding: 22px 20px 40px;
+  }
+
+  .welcome-illustration {
+    width: 190px;
+  }
+
+  .pickup-table-head,
+  .pickup-row {
+    grid-template-columns: 1fr 1.2fr 1fr 105px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 650px) {
+  .seller-dashboard-sidebar {
+    position: static;
+    width: 68px;
+    flex-basis: 68px;
+    padding: 18px 7px;
+  }
+
+  .dashboard-brand {
+    justify-content: center;
+    padding: 0 0 25px;
+    font-size: 0;
+  }
+
+  .dashboard-brand .brand-leaf {
+    font-size: 25px;
+  }
+
+  .seller-dashboard-sidebar nav a,
+  .seller-dashboard-sidebar nav button,
+  .dashboard-logout {
+    justify-content: center;
+    padding: 12px 4px;
+    font-size: 0;
+  }
+
+  .seller-dashboard-sidebar .nav-icon {
+    font-size: 18px;
+  }
+
+  .seller-dashboard-main {
+    width: calc(100% - 68px);
+    margin-left: 0;
+  }
+
+  .dashboard-topbar {
+    min-height: 65px;
+    padding: 10px 13px;
+  }
+
+  .dashboard-topbar h1 {
+    font-size: 17px;
+  }
+
+  .dashboard-top-actions {
+    gap: 7px;
+  }
+
+  .dashboard-profile-button {
+    gap: 5px;
+    padding-right: 6px;
+    font-size: 0;
+  }
+
+  .profile-chevron {
+    font-size: 12px;
+  }
+
+  .seller-dashboard-content {
+    padding: 16px 12px 30px;
+  }
+
+  .dashboard-welcome {
+    min-height: 120px;
+    padding: 17px;
+  }
+
+  .dashboard-welcome h2 {
+    font-size: 21px;
+  }
+
+  .dashboard-welcome p:last-child {
+    max-width: 190px;
+    font-size: 11px;
+  }
+
+  .welcome-illustration {
+    position: absolute;
+    right: -18px;
+    bottom: 0;
+    width: 125px;
+    opacity: 0.8;
+  }
+
+  .rate-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .rate-card {
+    min-height: 78px;
+  }
+
+  .pickup-status-section {
+    overflow-x: auto;
+    padding: 14px 10px 6px;
+  }
+
+  .pickup-table {
+    min-width: 570px;
+  }
+}

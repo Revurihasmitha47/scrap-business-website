@@ -1,0 +1,231 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+.staff-shell {
+  min-height: 100vh;
+  background: #f4f7fb;
+}
+.staff-main {
+  min-height: 100vh;
+  margin-left: 253px;
+}
+.staff-content {
+  padding: 40px 48px 70px;
+}
+.staff-page-heading h1 {
+  margin: 7px 0 4px;
+  color: #092b2a;
+  font-size: 36px;
+}
+.staff-page-heading p,
+.staff-section-heading p {
+  margin: 0;
+  color: #58736c;
+}
+.staff-eyebrow {
+  color: #ff6333;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+.staff-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 28px 0 20px;
+}
+.staff-summary-card {
+  display: flex;
+  gap: 14px;
+  min-height: 88px;
+  padding: 18px;
+  border: 1px solid #dce9df;
+  border-radius: 13px;
+  background: #fff;
+}
+.staff-summary-card > span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: #087345;
+  background: #def5e6;
+  font-size: 20px;
+}
+.staff-summary-card small,
+.staff-summary-card p {
+  display: block;
+  color: #58736c;
+  font-size: 12px;
+}
+.staff-summary-card strong {
+  display: block;
+  margin: 3px 0;
+  color: #092b2a;
+  font-size: 25px;
+}
+.staff-summary-card p {
+  margin: 0;
+}
+.staff-summary-card.success > span {
+  color: #fff;
+  background: #20a052;
+}
+.staff-summary-card.orange {
+  border-color: #f6dfb7;
+}
+.staff-summary-card.orange > span {
+  color: #a86400;
+  background: #fff0c8;
+}
+.staff-summary-card.red {
+  border-color: #f0d2d0;
+}
+.staff-summary-card.red > span {
+  color: #c43939;
+  background: #ffe2e0;
+}
+.staff-table-card {
+  padding: 22px;
+  border: 1px solid #dce5e0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 25px #173e3310;
+}
+.staff-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.staff-section-heading h2 {
+  margin: 0 0 4px;
+  color: #092b2a;
+  font-size: 22px;
+}
+.staff-error {
+  color: #b52d28;
+}
+.staff-status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: #0c7c43;
+  background: #dcf4e2;
+  font-size: 11px;
+  font-weight: 700;
+}
+.staff-status.done {
+  color: #087345;
+  background: #d9f2df;
+}
+.staff-action-link,
+.staff-action-button {
+  margin-right: 7px;
+  padding: 7px 11px;
+  border: 1px solid #bcd9ca;
+  border-radius: 7px;
+  color: #087345;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+.staff-action-button {
+  border-color: #ff6333;
+  color: #fff;
+  background: #ff6333;
+}
+.staff-pickup-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 4px;
+}
+.staff-pickup-card {
+  padding: 18px;
+  border: 1px solid #dce9df;
+  border-radius: 12px;
+  background: #fff;
+}
+.staff-card-top {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.staff-seller-avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  color: #087345;
+  background: #d9f2df;
+  font-weight: 800;
+}
+.staff-card-top div {
+  flex: 1;
+}
+.staff-card-top strong,
+.staff-card-top small {
+  display: block;
+}
+.staff-card-top small {
+  margin-top: 3px;
+  color: #5e7a6f;
+  font-size: 11px;
+}
+.staff-card-facts {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.8fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+.staff-card-facts span {
+  min-width: 0;
+}
+.staff-card-facts small,
+.staff-card-facts strong {
+  display: block;
+}
+.staff-card-facts small {
+  margin-bottom: 5px;
+  color: #71877f;
+  font-size: 11px;
+}
+.staff-card-facts strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.staff-card-actions {
+  padding-top: 13px;
+  border-top: 1px solid #e5eee7;
+  text-align: right;
+}
+@media (max-width: 1000px) {
+  .staff-content {
+    padding: 28px 20px;
+  }
+  .staff-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .staff-main {
+    margin-left: 70px;
+  }
+}
+@media (max-width: 650px) {
+  .staff-summary-grid,
+  .staff-pickup-cards {
+    grid-template-columns: 1fr;
+  }
+  .staff-content {
+    padding: 22px 12px;
+  }
+  .staff-table-card {
+    padding: 14px;
+  }
+}

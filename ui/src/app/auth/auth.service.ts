@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 
 export type AccountType = 'ADMIN' | 'STAFF' | 'HOME_SELLER' | 'BULK_SELLER';
-export interface Session { userId: string; email: string; fullName: string; accountType: AccountType; }
+export interface Session { userId: string; email: string; fullName: string; accountType: AccountType; mustChangePassword?: boolean; }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -12,6 +12,7 @@ export class AuthService {
   constructor(private readonly http: HttpClient) {}
 
   get session(): Session | null { return this.subject.value; }
+  setSession(session: Session): void { this.subject.next(session); }
   async initialize(): Promise<void> { try { this.subject.next(await firstValueFrom(this.http.get<Session>('/api/auth/session', { withCredentials: true }))); } catch { this.subject.next(null); } }
   async registerSeller(payload: unknown): Promise<void> { await this.createSession(this.http.post<Session>('/api/auth/register', payload, { withCredentials: true })); }
   async registerAdmin(payload: unknown): Promise<void> { await this.createSession(this.http.post<Session>('/api/auth/setup/admin', payload, { withCredentials: true })); }

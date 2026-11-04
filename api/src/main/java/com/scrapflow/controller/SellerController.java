@@ -1,0 +1,24 @@
+package com.scrapflow.controller;
+
+import com.scrapflow.auth.SessionUserService;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
+
+@RestController
+@RequestMapping("/api/seller")
+public class SellerController {
+    private final JdbcTemplate jdbc; private final SessionUserService users;
+    public SellerController(JdbcTemplate jdbc, SessionUserService users){this.jdbc=jdbc;this.users=users;}
+
+    @GetMapping("/dashboard")
+    public Map<String,Object> dashboard(){var u=users.require("HOME_SELLER","BULK_SELLER");return Map.of("active",count("select count(*) from pickup_requests where seller_id=? and status in ('SUBMITTED','CONFIRMED','SCHEDULED','ASSIGNED','ON_THE_WAY')",u.id()),"scheduled",count("select count(*) from pickup_requests where seller_id=? and status in ('SCHEDULED','ASSIGNED')",u.id()),"completed",count("select count(*) from pickup_requests where seller_id=? and status in ('COLLECTED','COMPLETED')",u.id()),"cancelled",count("select count(*) from pickup_requests where seller_id=? and status in ('CANCELLED','REJECTED','UNABLE_TO_COLLECT')",u.id()),"recent",jdbc.queryForList("select id,status,preferred_date,preferred_time,estimated_amount,actual_amount from pickup_requests where seller_id=? order by created_at desc limit 5",u.id()));}
+
+    @GetMapping("/requests/{id}")
+    public Map<String,Object> request(@PathVariable UUID id){var u=users.require("HOME_SELLER","BULK_SELLER");Map<String,Object> p;try{p=jdbc.queryForMap("select p.*,s.full_name seller_name,s.email seller_email,s.phone seller_phone,s.account_type seller_type from pickup_requests p join profiles s on s.id=p.seller_id where p.id=? and p.seller_id=?",id,u.id());}catch(Exception e){throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND,"Pickup request not found");}Map<String,Object> result=new LinkedHashMap<>();result.put("pickup",p);result.put("items",jdbc.queryForList("select i.id,i.estimated_quantity,i.actual_weight,i.saved_rate,case when i.actual_weight is null then null else round(i.actual_weight*i.saved_rate,2) end final_amount,coalesce(i.category_name_snapshot,c.name) category_name from pickup_items i join scrap_categories c on c.id=i.category_id where i.pickup_id=? order by c.name",id));result.put("history",jdbc.queryForList("select h.status,h.reason,h.created_at,p.full_name changed_by from pickup_status_history h join profiles p on p.id=h.changed_by where h.pickup_id=? order by h.created_at",id));return result;}
+    @PostMapping("/requests/{id}/cancel") public Map<String,Object> cancel(@PathVariable UUID id,@RequestBody Map<String,String> body){var u=users.require("HOME_SELLER","BULK_SELLER");Integer allowed=jdbc.queryForObject("select count(*) from pickup_requests where id=? and seller_id=? and status in ('SUBMITTED','CONFIRMED')",Integer.class,id,u.id());if(allowed==null||allowed==0)throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST,"This pickup cannot be cancelled at its current stage");String reason=body.get("reason");if(reason==null||reason.isBlank())throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST,"Cancellation reason is required");jdbc.update("update pickup_requests set status='CANCELLED',cancelled_reason=?,updated_at=now() where id=?",reason,id);jdbc.update("insert into pickup_status_history(pickup_id,status,changed_by,reason) values(?,?,?,?)",id,"CANCELLED",u.id(),reason);return request(id);}
+    @GetMapping("/history") public List<Map<String,Object>> history(){var u=users.require("HOME_SELLER","BULK_SELLER");return jdbc.queryForList("select id,status,preferred_date,preferred_time,actual_weight,actual_amount,collection_notes,estimated_amount from pickup_requests where seller_id=? and status in ('COLLECTED','COMPLETED','CANCELLED','REJECTED','UNABLE_TO_COLLECT') order by updated_at desc",u.id());}
+    @GetMapping("/notifications") public List<Map<String,Object>> notifications(){var u=users.require("HOME_SELLER","BULK_SELLER");return jdbc.queryForList("select id,notification_type,title,message,related_entity_type,related_entity_id,is_read,created_at,read_at from notifications where recipient_id=? order by created_at desc",u.id());}
+    @PatchMapping("/notifications/{id}/read") public void markNotificationRead(@PathVariable UUID id){var u=users.require("HOME_SELLER","BULK_SELLER");int updated=jdbc.update("update notifications set is_read=true,read_at=now() where id=? and recipient_id=?",id,u.id());if(updated==0)throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND,"Notification not found");}
+    private long count(String sql,UUID id){Long n=jdbc.queryForObject(sql,Long.class,id);return n==null?0:n;}
+}

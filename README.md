@@ -1,34 +1,50 @@
 # ScrapFlow
 
-ScrapFlow is a Spring Boot 3.2 + Angular 17 scrap pickup application using local PostgreSQL.
+ScrapFlow is a Spring Boot 3.2 + Angular 17 scrap pickup application. The Angular frontend is packaged into the Spring Boot JAR for single-port serving, and the API uses PostgreSQL through JDBC.
 
 ## Local setup
 
-Prerequisites: Java 17, Maven 3.9+, Node.js 18+, npm, and PostgreSQL.
+Prerequisites: Java 17, Maven 3.9+, Node.js 18+, npm, and a Neon PostgreSQL database.
 
-1. Create the `scrap_business` database in PostgreSQL.
-2. Copy `api/.env.example` to `api/.env` and set `DATABASE_PASSWORD`.
-3. Open `db/migrations/V1__scrapflow_local_postgresql.sql` in DBeaver and run it against `scrap_business`.
-4. Start the backend and frontend:
+### Configure Neon in VS Code
+
+1. Copy `api/.env.example` to `api/.env`.
+2. In `api/.env`, replace `<NEON_HOST>` with the host shown in Neon connection settings and replace `YOUR_NEON_PASSWORD` with your Neon password. Keep this file local; it is ignored by Git.
+3. The resulting URL must have this shape:
+
+```text
+DATABASE_URL=jdbc:postgresql://<NEON_HOST>:5432/neondb?sslmode=require
+DATABASE_USERNAME=neondb_owner
+DATABASE_PASSWORD=your-local-secret
+```
+
+Use the same host, database, username, and password in DBeaver when inspecting the database. Do not put real credentials in `application.properties`, `README.md`, or any tracked file.
+
+The application imports `api/.env` when started from the repository root or from `api`, and also accepts these three values as shell/environment variables. In the VS Code terminal, for example:
+
+```powershell
+$env:DATABASE_URL = 'jdbc:postgresql://<NEON_HOST>:5432/neondb?sslmode=require'
+$env:DATABASE_USERNAME = 'neondb_owner'
+$env:DATABASE_PASSWORD = 'your-local-secret'
+```
+
+Prefer `api/.env` for local development so the values are loaded automatically by Spring Boot.
+
+### Run the application and migrations
+
+Flyway is configured to run every versioned SQL file in `api/src/main/resources/db/migration/` automatically before the application starts. `spring.jpa.hibernate.ddl-auto=none` remains enabled, so Hibernate will not create, update, or drop schema objects.
+
+From the VS Code terminal:
 
 ```powershell
 cd api
 mvn spring-boot:run
 ```
 
-In another terminal:
+For a packaged single-port application, build with `mvn package`, then run the JAR with the same environment values. The Angular build is copied into the JAR by the Maven build.
 
-```powershell
-cd ui
-npm install
-npm run start
-```
+Do not manually rerun a migration that Flyway has recorded. On a database where these scripts were already applied manually, inspect the schema first and baseline it deliberately before first startup; do not use a destructive repair or clean operation. A fresh database can be migrated directly by the application.
 
-Open `http://localhost:4200`. Angular proxies `/api` requests to Spring Boot on port `8000`.
+The migrations contain PostgreSQL-native SQL, including `pgcrypto` and `gen_random_uuid()`. No Supabase-specific SQL was found. `V14` inserts default email templates; review existing email-template data before adopting these migrations on a database that was populated outside Flyway.
 
-Authentication uses local Spring Security sessions and BCrypt password hashes. Application data is read and written using JDBC against PostgreSQL. Spring Boot does not create or alter tables automatically.
-
-After registering a user, assign administrative or staff roles and client memberships directly in PostgreSQL when needed.
-# Email configuration and templates
-
-Apply `db/migrations/V11__email_configuration_and_templates.sql` after the existing migrations. If V11 was already applied, also apply `db/migrations/V12__email_template_metadata.sql`; it adds the template description and version columns required by the template API. Set a stable `EMAIL_SECRET_KEY` in the API environment before saving SMTP credentials; passwords are encrypted at rest and masked in the UI. As an admin, open `/admin/email/configuration` and `/admin/email/templates`. The staff invitation flow uses the active `STAFF_INVITATION` template and replaces `{{fullName}}`, `{{inviteUrl}}`, and `{{expiresInHours}}` before sending through the active SMTP configuration.
+Authentication uses local Spring Security sessions and BCrypt password hashes. After registering a user, assign administrative or staff roles and client memberships directly in PostgreSQL when needed.

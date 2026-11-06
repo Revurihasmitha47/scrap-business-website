@@ -79,7 +79,14 @@ export class EmailTemplatesPage implements OnInit {
     ];
   }
 
-  open(): void { this.form = { template_key: '', name: '', description: '', version: 1, subject: '', html_content: '', text_content: '', variables_json: '{}', active: true, template_type_id: this.types[0]?.id }; }
+  open(): void {
+    const firstType = this.types[0];
+    this.form = { template_key: firstType?.type_key || '', name: '', description: '', version: 1, subject: '', html_content: '', text_content: '', variables_json: '{}', active: true, template_type_id: firstType?.id };
+  }
+  onTemplateTypeChange(typeId?: string): void {
+    if (!this.form || this.form.id) return;
+    this.form.template_key = this.types.find((type) => type.id === typeId)?.type_key || '';
+  }
   edit(item: EmailTemplate): void { this.form = { ...item }; }
   openType(): void { this.typeForm = { type_key: '', name: '', description: '', active: true }; }
   close(): void { this.form = undefined; }

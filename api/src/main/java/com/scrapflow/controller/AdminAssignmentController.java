@@ -36,7 +36,7 @@ public class AdminAssignmentController {
         sql.append(" order by p.full_name");
         String status = String.valueOf(request.get("status"));
         UUID assigned = (UUID) request.get("assigned_staff_id");
-        boolean assignableStatus = Set.of("CONFIRMED", "SCHEDULED").contains(status);
+        boolean assignableStatus = Set.of("SUBMITTED", "CONFIRMED", "SCHEDULED").contains(status);
         List<Map<String,Object>> rows = jdbc.queryForList(sql.toString(), args.toArray());
         rows.forEach(row -> {
             boolean active = "ACTIVE".equals(String.valueOf(row.get("account_status")));
@@ -71,13 +71,13 @@ public class AdminAssignmentController {
         var admin = users.require("ADMIN");
         Map<String,Object> existing = pickup(id);
         String status = String.valueOf(existing.get("status"));
-        if (!Set.of("CONFIRMED", "SCHEDULED").contains(status)) throw new ResponseStatusException(HttpStatus.CONFLICT, "Only Confirmed or Scheduled pickups can be assigned.");
+        if (!Set.of("SUBMITTED", "CONFIRMED", "SCHEDULED").contains(status)) throw new ResponseStatusException(HttpStatus.CONFLICT, "This pickup cannot be assigned in its current status.");
         UUID previous = (UUID) existing.get("assigned_staff_id");
         if (previous != null && (request.reason() == null || request.reason().isBlank())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reassignment reason is required.");
         if (previous != null && previous.equals(request.staffId())) throw new ResponseStatusException(HttpStatus.CONFLICT, "This Staff member is already assigned to the pickup.");
         Integer eligible = jdbc.queryForObject("select count(*) from profiles where id=? and account_type='STAFF' and account_status='ACTIVE' and availability_status='AVAILABLE'", Integer.class, request.staffId());
         if (eligible == null || eligible == 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Selected Staff is inactive or unavailable.");
-        int updated = jdbc.update("update pickup_requests set assigned_staff_id=?,status='ASSIGNED',updated_at=now() where id=? and status in ('CONFIRMED','SCHEDULED')", request.staffId(), id);
+        int updated = jdbc.update("update pickup_requests set assigned_staff_id=?,status='ASSIGNED',updated_at=now() where id=? and status in ('SUBMITTED','CONFIRMED','SCHEDULED')", request.staffId(), id);
         if (updated != 1) throw new ResponseStatusException(HttpStatus.CONFLICT, "Pickup was changed by another Admin. Refresh and try again.");
         String reason = request.reason() == null || request.reason().isBlank() ? request.note() : request.reason();
         jdbc.update("insert into staff_assignment_history(pickup_id,previous_staff_id,assigned_staff_id,changed_by,reason) values(?,?,?,?,?)", id, previous, request.staffId(), admin.id(), reason);

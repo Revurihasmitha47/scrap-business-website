@@ -3,7 +3,69 @@
 }
 
 .assign-page-title {
-  align-items: center;
+  display: none;
+}
+
+.assign-page .admin-content {
+  position: relative;
+  min-height: calc(100vh - 84px);
+}
+
+.assign-page .admin-content::before {
+  position: fixed;
+  inset: 84px 0 0;
+  z-index: 0;
+  background: rgba(16, 45, 35, 0.18);
+  content: "";
+}
+
+.assign-modal {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, calc(100vw - 56px));
+  max-height: calc(100vh - 112px);
+  margin: 0 auto;
+  overflow: auto;
+  border: 1px solid #e0e9e1;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 20px 55px rgba(16, 45, 35, 0.22);
+}
+
+.assign-modal-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 26px 18px;
+  border-bottom: 1px solid #edf1ed;
+}
+
+.assign-modal-heading h1 {
+  margin: 0;
+  color: #123e32;
+  font-size: 24px;
+}
+
+.assign-modal-heading p {
+  margin: 5px 0 0;
+  color: #71847a;
+  font-size: 13px;
+}
+
+.assign-modal-heading p strong {
+  color: #173e33;
+}
+
+.assign-modal-close {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  color: #71847a;
+  background: transparent;
+  cursor: pointer;
+  font-size: 28px;
+  line-height: 1;
 }
 
 .assign-subtitle {
@@ -14,9 +76,33 @@
 
 .assign-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.8fr);
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 0;
   align-items: start;
+}
+
+.assign-summary .summary-facts {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 18px;
+}
+
+.assign-summary .summary-facts > div {
+  min-width: 0;
+}
+
+.assign-summary {
+  order: 1;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.assign-card {
+  order: 2;
+  border: 0;
+  border-top: 1px solid #edf1ed;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .assign-card {
@@ -291,6 +377,50 @@
 }
 
 @media (max-width: 700px) {
+  .assign-page-title {
+    display: none !important;
+  }
+
+  .assign-page .admin-content::before {
+    inset: 66px 0 0;
+  }
+
+  .assign-modal {
+    width: calc(100vw - 24px);
+    max-height: calc(100vh - 82px);
+    border-radius: 12px;
+  }
+
+  .assign-modal-heading {
+    padding: 18px 16px 14px;
+  }
+
+  .assign-modal-heading h1 {
+    font-size: 21px;
+  }
+
+  .assign-modal-heading p {
+    max-width: 240px;
+    line-height: 1.4;
+  }
+
+  .assign-summary .summary-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .assign-summary .assign-card-heading {
+    flex-wrap: wrap;
+  }
+
+  .assign-summary .assign-card-heading h2 {
+    font-size: 20px;
+  }
+
+  .assign-card,
+  .assign-summary {
+    padding: 16px;
+  }
+
   .assign-toolbar {
     grid-template-columns: 1fr;
   }

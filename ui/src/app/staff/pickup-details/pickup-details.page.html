@@ -15,6 +15,58 @@
       </div>
       <p class="staff-error" *ngIf="error">{{ error }}</p>
       <ng-container *ngIf="pickup">
+        <section class="staff-reference-grid">
+          <div class="staff-reference-main">
+            <section class="staff-detail-card staff-request-card">
+              <div class="staff-request-meta">
+                <div>
+                  <span>Request ID</span>
+                  <strong>PR-{{ pickup.id.slice(0, 8) }}</strong>
+                </div>
+                <span class="staff-status">{{ pickup.status }}</span>
+                <div>
+                  <span>Assigned to</span>
+                  <strong>{{ auth.session?.fullName || 'Pickup Staff' }}</strong>
+                </div>
+                <div>
+                  <span>Request date</span>
+                  <strong>{{ pickup.preferred_date }}, {{ pickup.preferred_time || 'Flexible' }}</strong>
+                </div>
+              </div>
+              <div class="staff-seller-overview">
+                <div>
+                  <span class="staff-eyebrow">SELLER</span>
+                  <h2>{{ pickup.seller_name || 'Seller' }}</h2>
+                  <p>{{ pickup.seller_type || 'Seller' }}</p>
+                  <a *ngIf="pickup.seller_phone" [href]="'tel:' + pickup.seller_phone">☎ {{ pickup.seller_phone }}</a>
+                </div>
+                <div class="staff-address-overview">
+                  <span class="staff-eyebrow">PICKUP ADDRESS</span>
+                  <p>{{ addressText(pickup.pickup_address) }}</p>
+                </div>
+              </div>
+              <div class="staff-slot-overview">
+                <div><span>Preferred Pickup Slot</span><strong>{{ pickup.preferred_date }}<br>{{ pickup.preferred_time || 'Flexible' }}</strong></div>
+                <div><span>Estimated Amount</span><strong>₹{{ pickup.estimated_amount || 0 }}</strong></div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="staff-status-card">
+            <h2>Pickup Status</h2>
+            <div class="staff-status-steps">
+              <div [class.active]="pickup.status === 'ASSIGNED' || pickup.status === 'ON_THE_WAY' || pickup.status === 'COLLECTED' || pickup.status === 'COMPLETED'"><span>✓</span><strong>Assigned</strong><small>Pickup assigned to you</small></div>
+              <div [class.active]="pickup.status === 'ON_THE_WAY' || pickup.status === 'COLLECTED' || pickup.status === 'COMPLETED'"><span>●</span><strong>On the way</strong><small>Heading to seller</small></div>
+              <div [class.active]="pickup.status === 'COLLECTED' || pickup.status === 'COMPLETED'"><span>✓</span><strong>Collected</strong><small>Pickup completed</small></div>
+            </div>
+            <button class="staff-primary-button status-action" *ngIf="pickup.status === 'ASSIGNED'" type="button" (click)="start()">▶ &nbsp; Start Pickup</button>
+            <button class="staff-primary-button status-action" *ngIf="pickup.status === 'ON_THE_WAY'" type="button" (click)="start()" disabled>On the way</button>
+            <div class="staff-unable-panel" *ngIf="!isFinalized && (pickup.status === 'ASSIGNED' || pickup.status === 'ON_THE_WAY')">
+              <label>Mark Unable to Collect<select [(ngModel)]="unableReason"><option value="">Select a reason</option><option>Seller unavailable</option><option>Address not reachable</option><option>Vehicle or route issue</option><option>Other</option></select></label>
+              <button type="button" class="staff-danger-button" [disabled]="!unableReason || saving" (click)="markUnable()">Mark Unable to Collect</button>
+            </div>
+          </aside>
+        </section>
         <section class="staff-detail-card">
           <div class="staff-section-heading">
             <div>
@@ -44,6 +96,30 @@
           <div class="staff-detail-total">
             <strong>Final amount</strong><b>₹{{ finalTotal }}</b>
           </div>
+        </section>
+        <section class="staff-detail-card staff-photos-card">
+          <div class="staff-section-heading">
+            <div>
+              <span class="staff-eyebrow">PICKUP PHOTOS</span>
+              <h2>Photos from Seller</h2>
+            </div>
+            <span class="staff-photo-count">{{ photos.length }} photo{{ photos.length === 1 ? '' : 's' }}</span>
+          </div>
+          <div class="staff-photo-grid" *ngIf="photos.length">
+            <img *ngFor="let photo of photos" [src]="photo.url" [alt]="photo.name || 'Pickup photo'" />
+            <div class="staff-photo-preview" *ngFor="let photo of pendingPhotos">
+              <img [src]="photo.previewUrl" alt="Selected pickup photo" />
+              <button type="button" (click)="removePendingPhoto(photo)" aria-label="Remove selected photo">×</button>
+            </div>
+          </div>
+          <label class="staff-photo-picker" [class.disabled]="photoCount >= 5 || isFinalized">
+            <input type="file" accept="image/jpeg,image/png,image/webp" multiple [disabled]="photoCount >= 5 || isFinalized" (change)="onPhotosSelected($event)" />
+            <strong>+ Add photos</strong>
+            <small>JPG, PNG, or WEBP · Maximum 5 photos</small>
+          </label>
+          <button class="staff-primary-button staff-upload-button" type="button" *ngIf="pendingPhotos.length" [disabled]="saving" (click)="uploadPhotos()">
+            {{ saving ? 'Uploading...' : 'Upload selected photos' }}
+          </button>
         </section>
         <section class="staff-detail-card" *ngIf="!isFinalized">
           <h2>Payment to Seller</h2>

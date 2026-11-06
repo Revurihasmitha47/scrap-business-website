@@ -50,6 +50,7 @@ public class StaffController {
         result.put("pickup", pickup);
         result.put("items", jdbc.queryForList("select i.id,i.estimated_quantity,i.actual_weight,i.saved_rate,case when i.actual_weight is null then null else round(i.actual_weight*i.saved_rate,2) end final_amount,coalesce(i.category_name_snapshot,c.name) category_name from pickup_items i join scrap_categories c on c.id=i.category_id where i.pickup_id=? order by c.name", id));
         result.put("payments", jdbc.queryForList("select id,amount,payment_method,payment_reference,payment_notes,payment_status,recorded_by,created_at from pickup_payment_records where pickup_id=? order by created_at asc", id));
+        result.put("photos", jdbc.queryForList("select id,concat('/uploads/pickups/',storage_name) url,original_name name,content_type,created_at from pickup_photos where pickup_id=? order by created_at asc", id));
         result.put("history", jdbc.queryForList("select h.status,h.reason,h.created_at,p.full_name changed_by from pickup_status_history h join profiles p on p.id=h.changed_by where h.pickup_id=? order by h.created_at asc", id));
         return result;
     }

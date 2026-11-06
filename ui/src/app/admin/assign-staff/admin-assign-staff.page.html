@@ -52,11 +52,20 @@
 
       <div class="alert error" *ngIf="error">{{ error }}</div>
 
-      <div class="assign-layout">
+      <div class="assign-modal">
+        <div class="assign-modal-heading">
+          <div>
+            <h1>Assign Pickup Staff</h1>
+            <p>Assign a pickup staff member for request <strong>#PR-{{ pickup?.id | slice: 0 : 8 }}</strong></p>
+          </div>
+          <button type="button" class="assign-modal-close" routerLink="/admin/pickups" aria-label="Close">×</button>
+        </div>
+
+        <div class="assign-layout">
         <section class="admin-card assign-card">
           <div class="assign-card-heading">
             <div>
-              <h2>Available Staff</h2>
+              <h2>Select Staff Member</h2>
               <p class="assign-muted">
                 Search and select a staff member for this pickup.
               </p>
@@ -145,12 +154,37 @@
               </span>
             </button>
           </div>
+
+          <label class="assign-note">
+            Assignment Note <span>(Optional)</span>
+            <textarea
+              [(ngModel)]="note"
+              rows="4"
+              placeholder="Add any specific instructions for the staff member..."></textarea>
+          </label>
+
+          <div class="assign-actions">
+            <button
+              type="button"
+              class="secondary-button"
+              routerLink="/admin/pickups">
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="primary-button"
+              [disabled]="!selectedStaffId || assigning || !assignmentAllowed"
+              (click)="assign()">
+              {{ assigning ? "Assigning..." : pickup?.assigned_staff_id ?
+              "Reassign Staff" : "Assign Staff" }}
+            </button>
+          </div>
         </section>
 
         <aside class="admin-card assign-summary">
           <div class="assign-card-heading">
             <div>
-              <p class="eyebrow">PICKUP INFORMATION</p>
+              <p class="eyebrow">REQUEST DETAILS</p>
               <h2>Pickup Summary</h2>
             </div>
             <span
@@ -197,34 +231,8 @@
             </div>
           </div>
 
-          <label class="assign-note">
-            Assignment note
-            <textarea
-              [(ngModel)]="note"
-              rows="4"
-              placeholder="Optional note; reason is required for reassignment"
-            ></textarea>
-          </label>
-
-          <div class="assign-actions">
-            <button
-              type="button"
-              class="secondary-button"
-              routerLink="/admin/pickups"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="primary-button"
-              [disabled]="!selectedStaffId || assigning || !assignmentAllowed"
-              (click)="assign()"
-            >
-              {{ assigning ? "Assigning..." : pickup?.assigned_staff_id ?
-              "Reassign Staff" : "Assign Staff" }}
-            </button>
-          </div>
         </aside>
+        </div>
       </div>
     </section>
   </main>

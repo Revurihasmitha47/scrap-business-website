@@ -10,8 +10,13 @@
 }
 
 .forgot-link {
-  width: 100%;
+  width: auto;
   color: #087345;
   font-weight: 700;
   text-align: left;
+}
+
+.back-link {
+  margin-left: auto;
+  white-space: nowrap;
 }

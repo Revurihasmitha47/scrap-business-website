@@ -3,10 +3,10 @@
 .admin-page-title { justify-content: space-between; }
 .page-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .page-description { margin: -18px 0 24px; color: #72857b; }
-.template-types { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
-.template-types span { padding: 10px 14px; border: 1px solid #dce8db; border-radius: 9px; background: #fff; }
-.template-types small { display: block; margin-top: 3px; color: #899a8d; font-size: 11px; }
-.cms-table-row small { display: block; color: #899a8d; font-size: 11px; }
+.template-name-cell { display: grid; gap: 3px; min-width: 0; }
+.template-name-cell strong,
+.template-name-cell small { display: block; min-width: 0; overflow-wrap: anywhere; }
+.template-name-cell small { color: #899a8d; font-size: 11px; }
 .email-modal-backdrop { position: fixed; inset: 0; z-index: 1300; display: grid; place-items: center; padding: 20px; background: rgba(23, 62, 51, .35); }
 .email-modal { width: min(850px, calc(100vw - 40px)); max-height: calc(100vh - 60px); overflow: auto; border: 1px solid #dfeae1; border-radius: 16px; background: #fff; box-shadow: 0 20px 50px rgba(23, 62, 51, .24); }
 .small-modal { width: min(620px, calc(100vw - 40px)); }

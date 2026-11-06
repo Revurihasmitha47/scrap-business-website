@@ -37,6 +37,8 @@ export class StaffPickupDetailsPageComponent {
   pickup: any;
   items: any[] = [];
   payments: any[] = [];
+  photos: any[] = [];
+  pendingPhotos: any[] = [];
   weights: Record<string, number> = {};
   paymentRows: PaymentRow[] = [
     { amount: null, paymentMethod: "CASH", reference: "", notes: "" },
@@ -51,6 +53,7 @@ export class StaffPickupDetailsPageComponent {
   confirmed = false;
   saving = false;
   showRemaining = false;
+  unableReason = "";
   error = "";
 
   get actualTotal(): number {
@@ -84,6 +87,28 @@ export class StaffPickupDetailsPageComponent {
     );
   }
 
+  addressText(value: unknown): string {
+    if (!value) return "Address not available";
+    if (typeof value === "string") {
+      try {
+        return this.addressText(JSON.parse(value));
+      } catch {
+        return value;
+      }
+    }
+    if (typeof value === "object") {
+      const address = value as Record<string, unknown>;
+      return [address["addressLine1"], address["addressLine2"], address["city"], address["state"], address["postalCode"]]
+        .filter(Boolean)
+        .join(", ") || "Address not available";
+    }
+    return String(value);
+  }
+
+  get photoCount(): number {
+    return this.photos.length;
+  }
+
   async ngOnInit(): Promise<void> {
     try {
       const response = await this.api.staffPickupDetail(
@@ -92,6 +117,7 @@ export class StaffPickupDetailsPageComponent {
       this.pickup = response.pickup;
       this.items = response.items || [];
       this.payments = response.payments || [];
+      this.photos = response.photos || [];
       for (const item of this.items)
         if (item.actual_weight != null)
           this.weights[item.id] = item.actual_weight;
@@ -99,6 +125,11 @@ export class StaffPickupDetailsPageComponent {
       this.error = this.auth.errorMessage(e, "Could not load pickup details.");
     }
   }
+
+  onPhotosSelected(_: Event): void {}
+  removePendingPhoto(_: any): void {}
+  async uploadPhotos(): Promise<void> {}
+
   actionItems(): ActionMenuItem[] {
     const items: ActionMenuItem[] = [
       {
@@ -140,6 +171,20 @@ export class StaffPickupDetailsPageComponent {
       this.apply(await this.api.startStaffPickup(this.pickup.id));
     } catch (e) {
       this.error = this.auth.errorMessage(e, "Could not start pickup.");
+    }
+  }
+
+  async markUnable(): Promise<void> {
+    if (!this.pickup || !this.unableReason.trim() || this.saving) return;
+    this.saving = true;
+    this.error = "";
+    try {
+      this.apply(await this.api.unableStaffPickup(this.pickup.id, this.unableReason.trim()));
+      this.unableReason = "";
+    } catch (e) {
+      this.error = this.auth.errorMessage(e, "Could not update pickup status.");
+    } finally {
+      this.saving = false;
     }
   }
   async complete(): Promise<void> {
@@ -204,5 +249,6 @@ export class StaffPickupDetailsPageComponent {
     this.pickup = response.pickup;
     this.items = response.items || this.items;
     this.payments = response.payments || this.payments;
+    this.photos = response.photos || this.photos;
   }
 }

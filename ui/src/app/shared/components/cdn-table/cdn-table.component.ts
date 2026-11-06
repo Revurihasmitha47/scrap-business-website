@@ -6,6 +6,7 @@ import {
   ContentChildren,
   Directive,
   EventEmitter,
+  HostListener,
   Input,
   Output,
   QueryList,
@@ -73,6 +74,20 @@ export class CdnTableComponent<T = unknown> implements AfterContentInit {
   card?: CdnTableCardDirective;
 
   cellMap = new Map<string, TemplateRef<unknown>>();
+  compactViewport = false;
+
+  constructor() {
+    this.updateViewportMode();
+  }
+
+  @HostListener('window:resize')
+  onViewportResize(): void {
+    this.updateViewportMode();
+  }
+
+  private updateViewportMode(): void {
+    this.compactViewport = typeof window !== 'undefined' && window.innerWidth <= 1024;
+  }
 
   ngAfterContentInit(): void {
     this.rebuildCellMap();

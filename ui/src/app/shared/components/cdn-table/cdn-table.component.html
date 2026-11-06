@@ -1,6 +1,6 @@
 <div
   class="cms-table-shell"
-  *ngIf="viewMode === 'list'; else cards">
+  *ngIf="viewMode === 'list' && !compactViewport; else cards">
   <div class="cms-table-row cms-table-head">
     <span *ngFor="let column of columns">
       {{ column.header }}
@@ -11,7 +11,9 @@
   <div
     class="cms-table-row"
     *ngFor="let row of pagedRows; trackBy: trackByFn">
-    <span *ngFor="let column of columns">
+    <span
+      *ngFor="let column of columns"
+      [attr.data-label]="column.header">
       <ng-container
         *ngIf="cellMap.get(column.key) as template; else value">
         <ng-container
@@ -24,7 +26,10 @@
       </ng-template>
     </span>
 
-    <span *ngIf="actions">
+    <span
+      *ngIf="actions"
+      data-label="Actions"
+      class="cms-table-actions">
       <ng-container
         *ngTemplateOutlet="actions.template; context: { $implicit: row, row: row }">
       </ng-container>
@@ -53,6 +58,11 @@
         <span *ngFor="let column of columns.slice(1)">
           {{ column.header }}: {{ getCell(column, row) || '-' }}
         </span>
+        <div class="cms-basic-card-actions" *ngIf="actions">
+          <ng-container
+            *ngTemplateOutlet="actions.template; context: { $implicit: row, row: row }">
+          </ng-container>
+        </div>
       </article>
     </div>
   </ng-template>

@@ -1,4 +1,6 @@
-<aside class="staff-sidebar">
+<button class="mobile-nav-toggle staff-mobile-nav-toggle" type="button" aria-label="Open navigation" [attr.aria-expanded]="mobileOpen" (click)="mobileOpen = !mobileOpen">☰</button>
+<div class="mobile-nav-backdrop" *ngIf="mobileOpen" (click)="mobileOpen = false"></div>
+<aside class="staff-sidebar" [class.mobile-open]="mobileOpen">
   <a class="staff-brand" routerLink="/staff/my-pickups">
     <span class="staff-brand-mark">♻</span>
     <strong
@@ -9,6 +11,7 @@
 
   <nav aria-label="Staff navigation">
     <a
+      (click)="mobileOpen = false"
       routerLink="/staff/my-pickups"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
@@ -18,26 +21,26 @@
       ></span>
       <span>My Pickups</span>
     </a>
-    <a routerLink="/staff/map" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/staff/map" routerLinkActive="active">
       <span class="staff-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('map')" /></svg
       ></span>
       <span>Map</span>
     </a>
-    <a routerLink="/staff/history" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/staff/history" routerLinkActive="active">
       <span class="staff-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('history')" /></svg
       ></span>
       <span>History</span>
     </a>
-    <a routerLink="/staff/notifications" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/staff/notifications" routerLinkActive="active">
       <span class="staff-nav-icon"
         ><svg viewBox="0 0 24 24">
           <path [attr.d]="iconPath('notifications')" /></svg
       ></span>
       <span>Notifications</span>
     </a>
-    <a routerLink="/staff/profile" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/staff/profile" routerLinkActive="active">
       <span class="staff-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('profile')" /></svg
       ></span>
@@ -45,7 +48,7 @@
     </a>
   </nav>
 
-  <button class="staff-logout" type="button" (click)="logout()">
+  <button class="staff-logout" type="button" (click)="mobileOpen = false; logout()">
     <span class="staff-nav-icon"
       ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('logout')" /></svg
     ></span>

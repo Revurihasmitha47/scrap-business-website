@@ -55,6 +55,7 @@
 .cms-basic-cards article strong {
   color: #173e33;
   font-size: 15px;
+  padding-right: 42px;
 }
 
 .cms-basic-cards article > span:not(.status-pill) {
@@ -66,6 +67,20 @@
   position: absolute;
   top: 14px;
   right: 14px;
+  z-index: 2;
+  display: block;
+}
+
+.cms-basic-cards app-actions .cms-actions__button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid #d9eee1;
+  border-radius: 50%;
+  color: #173e33;
+  background: #f6fbf7;
+  font-size: 22px;
 }
 
 .cms-basic-cards .status-pill {

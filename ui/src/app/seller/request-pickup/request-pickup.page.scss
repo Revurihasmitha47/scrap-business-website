@@ -191,6 +191,12 @@
 
 .request-items-scroll {
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #9ab9a8 #edf4ef;
+}
+
+.request-items-scroll-hint {
+  display: none;
 }
 
 .request-items-head,
@@ -597,11 +603,42 @@
 
   .request-summary {
     position: static;
-    order: -1;
+    order: 1;
   }
 }
 
 @media (max-width: 700px) {
+  .request-content,
+  .request-layout,
+  .request-main,
+  .request-section,
+  .request-summary {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .request-section-heading,
+  .request-section-heading > div {
+    min-width: 0;
+  }
+
+  .request-section-heading {
+    flex-wrap: wrap;
+  }
+
+  .request-section-heading p,
+  .request-section-heading h2 {
+    overflow-wrap: anywhere;
+  }
+
+  .request-section input,
+  .request-section select,
+  .request-section textarea {
+    max-width: 100%;
+  }
+
   .request-page-heading h1 {
     font-size: 29px;
   }
@@ -622,5 +659,21 @@
 
   .request-summary {
     padding: 13px;
+  }
+
+  .request-items-scroll-hint {
+    display: block;
+    margin: -4px 0 7px;
+    color: #71887e;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .request-items-scroll {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: scroll;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
   }
 }

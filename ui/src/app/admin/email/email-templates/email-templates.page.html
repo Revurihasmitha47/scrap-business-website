@@ -1,0 +1,55 @@
+<div class="admin-shell">
+  <app-admin-sidebar [activeView]="'dashboard'"></app-admin-sidebar>
+  <main class="admin-main">
+    <header class="admin-header"><span>ScrapFlow</span></header>
+    <section class="admin-content email-content">
+      <div class="admin-page-title">
+        <div><p class="eyebrow">SETTINGS</p><h1>Email Templates</h1></div>
+        <div class="page-actions"><button type="button" class="primary-button" (click)="openType()">Template type</button><button type="button" class="primary-button" (click)="open()">Add</button><button type="button" class="admin-back" (click)="goBack()" aria-label="Back">←</button></div>
+      </div>
+      <p class="page-description">Manage template types and reusable email content.</p>
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+      <div class="alert success" *ngIf="message">{{ message }}</div>
+      <section class="template-types" *ngIf="types.length">
+        <span *ngFor="let type of types"><strong>{{ type.name }}</strong><small>{{ type.type_key }}</small></span>
+      </section>
+      <section class="admin-card full-admin-card admin-list-page">
+        <app-query-bar searchPlaceholder="Search email templates..." [searchValue]="search" [filters]="filters" [selectedFilter]="filter" [viewMode]="viewMode" (searchChange)="onSearchChange($event)" (filterChange)="onFilterChange($event)" (viewModeChange)="viewMode = $event"></app-query-bar>
+        <app-cdn-table [columns]="columns" [rows]="filteredTemplates" [loading]="loading" [viewMode]="viewMode === 'table' ? 'list' : 'card'" [pagination]="true" [pageSize]="pageSize" [currentPage]="currentPage" [pageSizeOptions]="[5, 10, 25, 50]" emptyMessage="No email templates found." (pageChange)="currentPage = $event" (pageSizeChange)="pageSize = $event">
+          <ng-template cdnTableCell="template_type_name" let-row>{{ row.template_type_name || row.template_type_key || 'Unassigned' }}</ng-template>
+          <ng-template cdnTableCell="name" let-row><strong>{{ row.name }}</strong><small>{{ row.template_key }}</small></ng-template>
+          <ng-template cdnTableCell="active" let-row><span class="status-pill" [class.status-green]="row.active" [class.status-orange]="!row.active">{{ row.active ? 'Active' : 'Inactive' }}</span></ng-template>
+          <ng-template cdnTableActions let-row><app-actions [items]="templateActions(row)"></app-actions></ng-template>
+        </app-cdn-table>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div class="email-modal-backdrop" *ngIf="form" (click)="close()">
+  <section class="email-modal" (click)="$event.stopPropagation()">
+    <div class="email-modal-heading"><h2>{{ form.id ? 'Edit' : 'Add' }} email template</h2><button type="button" class="modal-close" (click)="close()" aria-label="Close">×</button></div>
+    <div class="email-fields">
+      <label>Template type<select [(ngModel)]="form.template_type_id"><option [ngValue]="undefined">Unassigned</option><option *ngFor="let type of types" [ngValue]="type.id">{{ type.name }} ({{ type.type_key }})</option></select></label>
+      <label>Version<input type="number" min="1" [(ngModel)]="form.version" /></label>
+      <label>Template name<input [(ngModel)]="form.name" /></label>
+      <label>Template key<input [(ngModel)]="form.template_key" placeholder="STAFF_INVITATION" /><small>Runtime contract key.</small></label>
+      <label class="wide">Description<input [(ngModel)]="form.description" /></label>
+      <label class="wide">Email subject<input [(ngModel)]="form.subject" placeholder="Welcome to ScrapFlow" /></label>
+      <label class="wide html-label">HTML email content<div class="editor-tools"><button type="button" class="tool-button" (click)="autoGenerateVariables()">⚒ Auto-Generate Variables</button><button type="button" class="tool-button" (click)="htmlVisualMode = !htmlVisualMode">&lt;/&gt; {{ htmlVisualMode ? 'HTML Mode' : 'Visual Mode' }}</button></div><textarea *ngIf="!htmlVisualMode" rows="9" [(ngModel)]="form.html_content" placeholder="Enter HTML email content..."></textarea><div *ngIf="htmlVisualMode" class="visual-preview" [innerHTML]="form.html_content"></div></label>
+      <div class="wide variable-help"><strong>💡 Pro Tips</strong><ul><li>Use <b>Auto-Generate Variables</b> to build the JSON schema from detected placeholders.</li><li>Variables can be written like <code>{{'{{userName}}'}}</code> or <code>{{'{{amount}}'}}</code>.</li></ul><span>Variables detected: <b>{{ detectedVariables.length ? detectedVariables.join(', ') : 'No variables detected' }}</b></span></div>
+      <label class="wide">Plain text version<textarea rows="5" [(ngModel)]="form.text_content" placeholder="Plain text fallback for email clients"></textarea></label>
+      <label class="wide">Variables schema JSON<div class="schema-tools"><button type="button" class="tool-button" (click)="autoGenerateVariables()">⚒ Auto-Generate Variables</button></div><textarea rows="6" [(ngModel)]="form.variables_json" placeholder="{}"></textarea><small>If omitted, variables can still be inferred from {{'{{variable}}'}} placeholders.</small></label>
+      <label class="checkbox wide"><input type="checkbox" [(ngModel)]="form.active" /> Template is Active</label>
+    </div>
+    <div class="email-modal-actions"><button type="button" class="outline-orange" (click)="close()">Cancel</button><button type="button" class="primary-button" (click)="save()">Save</button></div>
+  </section>
+</div>
+
+<div class="email-modal-backdrop" *ngIf="typeForm" (click)="closeType()">
+  <section class="email-modal small-modal" (click)="$event.stopPropagation()">
+    <div class="email-modal-heading"><h2>Add template type</h2><button type="button" class="modal-close" (click)="closeType()" aria-label="Close">×</button></div>
+    <div class="email-fields"><label>Type key<input [(ngModel)]="typeForm.type_key" placeholder="PICKUP_STATUS" /></label><label>Name<input [(ngModel)]="typeForm.name" /></label><label class="wide">Description<input [(ngModel)]="typeForm.description" /></label></div>
+    <div class="email-modal-actions"><button type="button" class="outline-orange" (click)="closeType()">Cancel</button><button type="button" class="primary-button" (click)="saveType()">Save type</button></div>
+  </section>
+</div>

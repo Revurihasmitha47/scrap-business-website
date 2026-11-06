@@ -3,6 +3,8 @@ import { HomePageComponent } from "./public/home.page";
 import { RegisterPageComponent } from "./auth/pages/register/register.page";
 import { AdminRegisterPageComponent } from "./admin/register/admin-register.page";
 import { SignInPageComponent } from "./auth/pages/sign-in/sign-in.page";
+import { ForgotPasswordPageComponent } from "./auth/pages/forgot-password/forgot-password.page";
+import { ResetPasswordPageComponent } from "./auth/pages/reset-password/reset-password.page";
 import { DashboardPageComponent } from "./seller/legacy-dashboard/dashboard.page";
 import { InviteAcceptPageComponent } from "./auth/pages/invite-accept/invite-accept.page";
 import { AdminDashboardPageComponent } from "./admin/dashboard/admin-dashboard.page";
@@ -30,6 +32,8 @@ import { PickupDetailsPageComponent } from "./admin/pickup-details/pickup-detail
 import { CategoriesPageComponent } from "./admin/categories/categories.page";
 import { RatesPageComponent } from "./admin/rates/rates.page";
 import { SellersPageComponent } from "./admin/sellers/sellers.page";
+import { EmailConfigurationPage } from "./admin/email/email-configuration/email-configuration.page";
+import { EmailTemplatesPage } from "./admin/email/email-templates/email-templates.page";
 import { roleGuard } from "./auth/role.guard";
 
 export const routes: Routes = [
@@ -49,6 +53,8 @@ export const routes: Routes = [
     component: SignInPageComponent,
     title: "Sign In | ScrapFlow",
   },
+  { path: "forgot-password", component: ForgotPasswordPageComponent, title: "Forgot Password | ScrapFlow" },
+  { path: "reset-password", component: ResetPasswordPageComponent, title: "Reset Password | ScrapFlow" },
   {
     path: "change-password",
     component: ChangePasswordPageComponent,
@@ -150,6 +156,8 @@ export const routes: Routes = [
     canActivate: [roleGuard("ADMIN")],
     title: "Sellers | ScrapFlow",
   },
+  { path: "admin/email/configuration", component: EmailConfigurationPage, canActivate: [roleGuard("ADMIN")], title: "Email Configuration | ScrapFlow" },
+  { path: "admin/email/templates", component: EmailTemplatesPage, canActivate: [roleGuard("ADMIN")], title: "Email Templates | ScrapFlow" },
   {
     path: "admin/staff/add",
     component: AdminAddStaffPageComponent,

@@ -58,7 +58,9 @@ export class AdminSidebarComponent {
     { label: 'Scrap Rates', icon: 'rates', view: 'rates', route: '/admin/rates' },
     { label: 'Staff', icon: 'staff', view: 'staff', route: '/admin/staff' },
     { label: 'Sellers', icon: 'sellers', view: 'sellers', route: '/admin/sellers' },
-    { label: 'Reports', icon: 'reports', view: 'reports', route: '/admin/dashboard', queryParams: { view: 'reports' } }
+    { label: 'Reports', icon: 'reports', view: 'reports', route: '/admin/dashboard', queryParams: { view: 'reports' } },
+    { label: 'Email Configuration', icon: 'email', route: '/admin/email/configuration' },
+    { label: 'Email Templates', icon: 'email', route: '/admin/email/templates' }
   ];
 
   select(item: AdminNavItem): void { if (item.view) this.viewChange.emit(item.view); }
@@ -76,7 +78,7 @@ export class AdminSidebarComponent {
       rates: 'M5 19V9m7 10V5m7 14v-7',
       staff: 'M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm8-1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 19a5 5 0 0 1 10 0m1 0a4 4 0 0 1 8 0',
       sellers: 'M12 3 4 8l8 5 8-5-8-5Zm-8 9 8 5 8-5M4 17l8 5 8-5',
-      reports: 'M4 19V5m0 14h16M8 16v-5m4 5V8m4 8v-3',
+      reports: 'M4 19V5m0 14h16M8 16v-5m4 5V8m4 8v-3', email: 'M3 5h18v14H3V5Zm1 1 8 6 8-6',
       logout: 'M10 5H5v14h5m5-4 4-3-4-3m4 3H9'
     };
     return paths[icon] || paths['dashboard'];

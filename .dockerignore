@@ -1,0 +1,15 @@
+.git
+.github
+.playwright-cli
+node_modules
+ui/node_modules
+ui/dist
+ui/.angular
+api/target
+api/data
+api/uploads
+*.log
+.env
+*.env
+*.env.*
+!.env.example

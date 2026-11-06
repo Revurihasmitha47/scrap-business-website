@@ -30,10 +30,10 @@
   <section class="email-modal" (click)="$event.stopPropagation()">
     <div class="email-modal-heading"><h2>{{ form.id ? 'Edit' : 'Add' }} email template</h2><button type="button" class="modal-close" (click)="close()" aria-label="Close">×</button></div>
     <div class="email-fields">
-      <label>Template type<select [(ngModel)]="form.template_type_id"><option [ngValue]="undefined">Unassigned</option><option *ngFor="let type of types" [ngValue]="type.id">{{ type.name }} ({{ type.type_key }})</option></select></label>
+      <label>Template type<select [(ngModel)]="form.template_type_id" (ngModelChange)="onTemplateTypeChange($event)"><option [ngValue]="undefined">Unassigned</option><option *ngFor="let type of types" [ngValue]="type.id">{{ type.name }} ({{ type.type_key }})</option></select></label>
       <label>Version<input type="number" min="1" [(ngModel)]="form.version" /></label>
       <label>Template name<input [(ngModel)]="form.name" /></label>
-      <label>Template key<input [(ngModel)]="form.template_key" placeholder="STAFF_INVITATION" /><small>Runtime contract key.</small></label>
+      <label>Template key<input [(ngModel)]="form.template_key" readonly /><small>Automatically taken from the selected template type.</small></label>
       <label class="wide">Description<input [(ngModel)]="form.description" /></label>
       <label class="wide">Email subject<input [(ngModel)]="form.subject" placeholder="Welcome to ScrapFlow" /></label>
       <label class="wide html-label">HTML email content<div class="editor-tools"><button type="button" class="tool-button" (click)="autoGenerateVariables()">⚒ Auto-Generate Variables</button><button type="button" class="tool-button" (click)="htmlVisualMode = !htmlVisualMode">&lt;/&gt; {{ htmlVisualMode ? 'HTML Mode' : 'Visual Mode' }}</button></div><textarea *ngIf="!htmlVisualMode" rows="9" [(ngModel)]="form.html_content" placeholder="Enter HTML email content..."></textarea><div *ngIf="htmlVisualMode" class="visual-preview" [innerHTML]="form.html_content"></div></label>

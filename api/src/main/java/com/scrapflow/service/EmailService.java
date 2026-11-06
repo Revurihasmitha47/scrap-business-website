@@ -44,11 +44,15 @@ public class EmailService {
             props.put("mail.smtp.host", config.get("smtp_host")); props.put("mail.smtp.port", String.valueOf(config.get("smtp_port")));
             props.put("mail.smtp.auth", String.valueOf(config.get("smtp_auth"))); props.put("mail.smtp.starttls.enable", String.valueOf(config.get("smtp_start_tls")));
             props.put("mail.smtp.ssl.enable", String.valueOf(config.get("smtp_ssl")));
+            props.put("mail.smtp.connectiontimeout", "10000");
+            props.put("mail.smtp.timeout", "10000");
+            props.put("mail.smtp.writetimeout", "10000");
             Session session = Session.getInstance(props, new jakarta.mail.Authenticator() { protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() { return new jakarta.mail.PasswordAuthentication((String) config.get("smtp_username"), secrets.decrypt((String) config.get("smtp_password"))); }});
             MimeMessage message = new MimeMessage(session); message.setFrom(new InternetAddress((String) config.get("from_email"), (String) config.get("from_name"), StandardCharsets.UTF_8.name()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient)); message.setSubject(subject, StandardCharsets.UTF_8.name());
             if (text == null || text.isBlank()) message.setContent(html, "text/html; charset=UTF-8"); else { jakarta.mail.Multipart multipart = new jakarta.mail.internet.MimeMultipart("alternative"); jakarta.mail.internet.MimeBodyPart plain = new jakarta.mail.internet.MimeBodyPart(); plain.setText(text, StandardCharsets.UTF_8.name()); jakarta.mail.internet.MimeBodyPart rich = new jakarta.mail.internet.MimeBodyPart(); rich.setContent(html, "text/html; charset=UTF-8"); multipart.addBodyPart(plain); multipart.addBodyPart(rich); message.setContent(multipart); }
             Transport.send(message);
+            log.info("Email sent successfully for template={} recipient={}", templateKey, recipient);
         } catch (Exception ex) {
             log.error("Email send failed for template={} recipient={} host={} port={} from={}",
                     templateKey, recipient, config.get("smtp_host"), config.get("smtp_port"), config.get("from_email"), ex);

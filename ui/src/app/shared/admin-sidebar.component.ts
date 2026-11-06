@@ -18,26 +18,28 @@ type AdminNavItem = {
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <aside class="admin-sidebar admin-shared-sidebar">
+    <button class="mobile-nav-toggle admin-mobile-nav-toggle" type="button" aria-label="Open navigation" [attr.aria-expanded]="mobileOpen" (click)="mobileOpen = !mobileOpen">☰</button>
+    <div class="mobile-nav-backdrop" *ngIf="mobileOpen" (click)="mobileOpen = false"></div>
+    <aside class="admin-sidebar admin-shared-sidebar" [class.mobile-open]="mobileOpen">
       <a routerLink="/admin/dashboard" class="admin-brand">
         <span class="admin-brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('brand')" /></svg></span>
         ScrapFlow
       </a>
       <nav aria-label="Admin navigation">
         <ng-container *ngFor="let item of items">
-          <a *ngIf="item.route; else viewItem" [routerLink]="item.route" [queryParams]="item.queryParams" [class.active]="isItemActive(item)">
+          <a *ngIf="item.route; else viewItem" [routerLink]="item.route" [queryParams]="item.queryParams" [class.active]="isItemActive(item)" (click)="mobileOpen = false">
             <span class="admin-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path [attr.d]="iconPath(item.icon)" /></svg></span>
             <span>{{ item.label }}</span>
           </a>
           <ng-template #viewItem>
-            <button type="button" [class.active]="activeView === item.view" (click)="select(item)">
+            <button type="button" [class.active]="activeView === item.view" (click)="select(item); mobileOpen = false">
               <span class="admin-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path [attr.d]="iconPath(item.icon)" /></svg></span>
               <span>{{ item.label }}</span>
             </button>
           </ng-template>
         </ng-container>
       </nav>
-      <button class="admin-logout" type="button" (click)="logout()">
+      <button class="admin-logout" type="button" (click)="mobileOpen = false; logout()">
         <span class="admin-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('logout')" /></svg></span>
         <span>Logout</span>
       </button>
@@ -47,6 +49,7 @@ type AdminNavItem = {
 export class AdminSidebarComponent {
   @Input() activeView: AdminView = 'dashboard';
   @Output() viewChange = new EventEmitter<AdminView>();
+  mobileOpen = false;
 
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);

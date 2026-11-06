@@ -13,6 +13,7 @@ import { AuthService } from "../../../auth/auth.service";
 export class StaffSidebarComponent {
   readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  mobileOpen = false;
 
   iconPath(icon: string): string {
     const paths: Record<string, string> = {

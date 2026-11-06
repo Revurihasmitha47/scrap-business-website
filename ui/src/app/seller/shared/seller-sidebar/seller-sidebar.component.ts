@@ -13,6 +13,7 @@ import { AuthService } from "../../../auth/auth.service";
 export class SellerSidebarComponent {
   readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  mobileOpen = false;
 
   get isBulk(): boolean {
     return this.auth.session?.accountType === "BULK_SELLER";

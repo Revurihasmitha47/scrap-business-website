@@ -1,6 +1,9 @@
-<aside class="seller-sidebar">
+<button class="mobile-nav-toggle seller-mobile-nav-toggle" type="button" aria-label="Open navigation" [attr.aria-expanded]="mobileOpen" (click)="mobileOpen = !mobileOpen">☰</button>
+<div class="mobile-nav-backdrop" *ngIf="mobileOpen" (click)="mobileOpen = false"></div>
+<aside class="seller-sidebar" [class.mobile-open]="mobileOpen">
   <nav aria-label="Seller navigation">
     <a
+      (click)="mobileOpen = false"
       routerLink="/seller/dashboard"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
@@ -10,51 +13,51 @@
       ></span>
       <span>Dashboard</span>
     </a>
-    <a routerLink="/seller/rates" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/seller/rates" routerLinkActive="active">
       <span class="seller-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('rates')" /></svg
       ></span>
       <span>Current Rates</span>
     </a>
-    <a routerLink="/seller/request" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/seller/request" routerLinkActive="active">
       <span class="seller-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('requests')" /></svg
       ></span>
       <span>{{ isBulk ? "Request Bulk Pickup" : "Request Pickup" }}</span>
     </a>
-    <a routerLink="/seller/requests" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/seller/requests" routerLinkActive="active">
       <span class="seller-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('requests')" /></svg
       ></span>
       <span>My Requests</span>
     </a>
-    <a routerLink="/seller/history" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/seller/history" routerLinkActive="active">
       <span class="seller-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('history')" /></svg
       ></span>
       <span>Pickup History</span>
     </a>
-    <a *ngIf="isBulk" routerLink="/seller/profile" routerLinkActive="active">
+    <a *ngIf="isBulk" (click)="mobileOpen = false" routerLink="/seller/profile" routerLinkActive="active">
       <span class="seller-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('profile')" /></svg
       ></span>
       <span>Business Profile</span>
     </a>
-    <a routerLink="/seller/notifications" routerLinkActive="active">
+    <a (click)="mobileOpen = false" routerLink="/seller/notifications" routerLinkActive="active">
       <span class="seller-nav-icon"
         ><svg viewBox="0 0 24 24">
           <path [attr.d]="iconPath('notifications')" /></svg
       ></span>
       <span>Notifications</span>
     </a>
-    <a routerLink="/seller/profile" routerLinkActive="active">
+    <a *ngIf="!isBulk" (click)="mobileOpen = false" routerLink="/seller/profile" routerLinkActive="active">
       <span class="seller-nav-icon"
         ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('profile')" /></svg
       ></span>
       <span>Profile</span>
     </a>
   </nav>
-  <button class="seller-logout" type="button" (click)="logout()">
+  <button class="seller-logout" type="button" (click)="mobileOpen = false; logout()">
     <span class="seller-nav-icon"
       ><svg viewBox="0 0 24 24"><path [attr.d]="iconPath('logout')" /></svg
     ></span>

@@ -54,6 +54,193 @@
   color: #092b2a;
   font-size: 22px;
 }
+.staff-reference-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(360px, .9fr);
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+.staff-reference-main {
+  min-width: 0;
+}
+.staff-request-card {
+  margin-bottom: 0;
+}
+.staff-request-meta {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 1.3fr;
+  gap: 16px;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5eee7;
+}
+.staff-request-meta > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.staff-request-meta span,
+.staff-slot-overview span {
+  color: #81958b;
+  font-size: 11px;
+}
+.staff-request-meta strong {
+  color: #173e33;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.staff-request-meta > div:first-child strong {
+  font-size: 24px;
+}
+.staff-seller-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  padding: 18px 0;
+}
+.staff-seller-overview h2 {
+  margin: 6px 0 3px;
+  color: #092b2a;
+  font-size: 22px;
+}
+.staff-seller-overview p {
+  margin: 0;
+  color: #58736c;
+}
+.staff-seller-overview a {
+  display: inline-block;
+  margin-top: 10px;
+  color: #087345;
+  font-weight: 700;
+  text-decoration: none;
+}
+.staff-address-overview {
+  padding-left: 20px;
+  border-left: 1px solid #e5eee7;
+}
+.staff-address-overview p {
+  margin-top: 8px;
+  line-height: 1.55;
+  color: #355c4c;
+}
+.staff-slot-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.staff-slot-overview > div {
+  display: grid;
+  gap: 5px;
+  padding: 13px;
+  border: 1px solid #e0ebe2;
+  border-radius: 9px;
+}
+.staff-slot-overview strong {
+  color: #087345;
+  font-size: 14px;
+}
+.staff-status-card {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 22px;
+  border: 1px solid #dce5e0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 25px #173e3310;
+}
+.staff-status-card h2 {
+  margin: 0;
+  color: #092b2a;
+  font-size: 20px;
+}
+.staff-status-steps {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.staff-status-steps::before {
+  content: "";
+  position: absolute;
+  top: 17px;
+  right: 15%;
+  left: 15%;
+  height: 2px;
+  background: #dfe7e2;
+}
+.staff-status-steps > div {
+  display: grid;
+  position: relative;
+  z-index: 1;
+  justify-items: center;
+  gap: 5px;
+  text-align: center;
+}
+.staff-status-steps span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  color: #71847a;
+  background: #e7ece8;
+  font-weight: 800;
+}
+.staff-status-steps .active span {
+  color: #fff;
+  background: #ff6333;
+}
+.staff-status-steps strong {
+  color: #274b3e;
+  font-size: 12px;
+}
+.staff-status-steps small {
+  color: #71847a;
+  font-size: 10px;
+  line-height: 1.3;
+}
+.status-action {
+  width: 100%;
+  min-height: 48px;
+}
+.staff-unable-panel {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #f0b6a8;
+  border-radius: 9px;
+  background: #fff7f3;
+}
+.staff-unable-panel label {
+  display: grid;
+  gap: 6px;
+  color: #a44b3d;
+  font-size: 12px;
+  font-weight: 700;
+}
+.staff-unable-panel select {
+  min-height: 40px;
+  padding: 8px;
+  border: 1px solid #ed9a86;
+  border-radius: 7px;
+  background: #fff;
+  font: inherit;
+}
+.staff-danger-button {
+  min-height: 40px;
+  border: 1px solid #e34b3b;
+  border-radius: 7px;
+  color: #c9463e;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+.staff-danger-button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
 .staff-status {
   padding: 6px 10px;
   border-radius: 8px;
@@ -165,6 +352,92 @@
 .staff-error {
   color: #b52d28;
 }
+.staff-photos-card {
+  display: grid;
+  gap: 14px;
+}
+.staff-photo-count {
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #087345;
+  background: #e7f5eb;
+  font-size: 11px;
+  font-weight: 800;
+}
+.staff-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+.staff-photo-grid > img,
+.staff-photo-preview {
+  width: 100%;
+  aspect-ratio: 1.35;
+  overflow: hidden;
+  border: 1px solid #dce8df;
+  border-radius: 9px;
+  background: #f1f7f2;
+}
+.staff-photo-grid > img,
+.staff-photo-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.staff-photo-preview {
+  position: relative;
+}
+.staff-photo-preview button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: #b52d28;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+.staff-photo-picker {
+  display: grid;
+  gap: 4px;
+  place-items: center;
+  min-height: 82px;
+  padding: 12px;
+  border: 1px dashed #9fc8ac;
+  border-radius: 9px;
+  color: #087345;
+  background: #f5fbf6;
+  cursor: pointer;
+  text-align: center;
+}
+.staff-photo-picker,
+.staff-upload-button,
+.staff-photo-preview {
+  display: none !important;
+}
+.staff-photo-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.staff-photo-picker small {
+  color: #71847a;
+  font-size: 11px;
+  font-weight: 400;
+}
+.staff-photo-picker.disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+.staff-upload-button {
+  justify-self: end;
+}
 @media (max-width: 1000px) {
   .staff-main {
     margin-left: 70px;
@@ -174,6 +447,9 @@
   }
   .staff-payment-row {
     grid-template-columns: 1fr 1fr;
+  }
+  .staff-reference-grid {
+    grid-template-columns: 1fr;
   }
 }
 @media (max-width: 650px) {
@@ -191,5 +467,32 @@
   }
   .staff-detail-heading {
     display: block;
+  }
+  .staff-photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .staff-request-meta {
+    grid-template-columns: 1fr 1fr;
+  }
+  .staff-request-meta > div:first-child {
+    grid-column: 1 / -1;
+  }
+  .staff-seller-overview {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .staff-address-overview {
+    padding: 14px 0 0;
+    border-top: 1px solid #e5eee7;
+    border-left: 0;
+  }
+  .staff-status-card {
+    padding: 16px;
+  }
+  .staff-status-steps small {
+    display: none;
+  }
+  .staff-upload-button {
+    width: 100%;
   }
 }

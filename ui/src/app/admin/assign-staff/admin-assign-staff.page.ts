@@ -42,13 +42,13 @@ export class AdminAssignStaffPageComponent {
   }
 
   get assignmentAllowed(): boolean {
-    return ["CONFIRMED", "SCHEDULED", "ASSIGNED"].includes(this.pickup?.status);
+    return ["SUBMITTED", "CONFIRMED", "SCHEDULED", "ASSIGNED"].includes(this.pickup?.status);
   }
 
   get assignmentMessage(): string {
     return this.pickup?.status === "COMPLETED"
       ? "Completed pickups cannot be assigned."
-      : "Assignment is available after the pickup is confirmed or scheduled.";
+      : "Assignment is available for this pickup.";
   }
 
   async ngOnInit(): Promise<void> {

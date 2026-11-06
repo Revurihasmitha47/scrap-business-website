@@ -10,14 +10,11 @@
       <p class="page-description">Manage template types and reusable email content.</p>
       <div class="alert error" *ngIf="error">{{ error }}</div>
       <div class="alert success" *ngIf="message">{{ message }}</div>
-      <section class="template-types" *ngIf="types.length">
-        <span *ngFor="let type of types"><strong>{{ type.name }}</strong><small>{{ type.type_key }}</small></span>
-      </section>
       <section class="admin-card full-admin-card admin-list-page">
         <app-query-bar searchPlaceholder="Search email templates..." [searchValue]="search" [filters]="filters" [selectedFilter]="filter" [viewMode]="viewMode" (searchChange)="onSearchChange($event)" (filterChange)="onFilterChange($event)" (viewModeChange)="viewMode = $event"></app-query-bar>
         <app-cdn-table [columns]="columns" [rows]="filteredTemplates" [loading]="loading" [viewMode]="viewMode === 'table' ? 'list' : 'card'" [pagination]="true" [pageSize]="pageSize" [currentPage]="currentPage" [pageSizeOptions]="[5, 10, 25, 50]" emptyMessage="No email templates found." (pageChange)="currentPage = $event" (pageSizeChange)="pageSize = $event">
           <ng-template cdnTableCell="template_type_name" let-row>{{ row.template_type_name || row.template_type_key || 'Unassigned' }}</ng-template>
-          <ng-template cdnTableCell="name" let-row><strong>{{ row.name }}</strong><small>{{ row.template_key }}</small></ng-template>
+          <ng-template cdnTableCell="name" let-row><span class="template-name-cell"><strong>{{ row.name }}</strong><small>{{ row.template_key }}</small></span></ng-template>
           <ng-template cdnTableCell="active" let-row><span class="status-pill" [class.status-green]="row.active" [class.status-orange]="!row.active">{{ row.active ? 'Active' : 'Inactive' }}</span></ng-template>
           <ng-template cdnTableActions let-row><app-actions [items]="templateActions(row)"></app-actions></ng-template>
         </app-cdn-table>

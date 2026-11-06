@@ -5960,3 +5960,268 @@ app-admin-sidebar {
     padding-top: 90px;
   }
 }
+
+/* Shared mobile navigation and layout overrides for Admin, Seller, and Staff. */
+.mobile-nav-toggle,
+.mobile-nav-backdrop {
+  display: none;
+}
+
+/* Add/Edit screens use Cancel and Save actions; the duplicate corner close
+   controls are intentionally hidden across all CMS forms. */
+.staff-close,
+.category-modal-close,
+.modal-close {
+  display: none !important;
+}
+
+@media (max-width: 620px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .admin-shell::before,
+  .seller-shell::before,
+  .staff-shell::before {
+    display: none !important;
+  }
+
+  .admin-shell app-admin-sidebar,
+  .seller-shell app-seller-sidebar,
+  .staff-shell app-staff-sidebar {
+    position: static !important;
+    display: block !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .admin-shell .admin-shared-sidebar,
+  .seller-shell app-seller-sidebar .seller-sidebar,
+  .staff-shell app-staff-sidebar .staff-sidebar {
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+    z-index: 1400 !important;
+    display: flex !important;
+    width: min(286px, 86vw) !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    padding: 22px 14px 18px !important;
+    transform: translateX(-105%);
+    transition: transform 180ms ease;
+    box-shadow: 12px 0 30px #102d231f;
+  }
+
+  .admin-shell .admin-shared-sidebar.mobile-open,
+  .seller-shell app-seller-sidebar .seller-sidebar.mobile-open,
+  .staff-shell app-staff-sidebar .staff-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .admin-shell .admin-shared-sidebar .admin-brand,
+  .seller-shell app-seller-sidebar .seller-sidebar .seller-brand {
+    display: flex !important;
+    padding: 0 14px 28px !important;
+    font-size: 23px !important;
+  }
+
+  .admin-shell .admin-shared-sidebar .admin-brand span,
+  .seller-shell app-seller-sidebar .seller-sidebar .seller-brand > span {
+    font-size: 27px !important;
+  }
+
+  .admin-shell .admin-shared-sidebar nav button,
+  .admin-shell .admin-shared-sidebar nav a,
+  .seller-shell app-seller-sidebar .seller-sidebar nav a,
+  .staff-shell app-staff-sidebar .staff-sidebar nav a,
+  .admin-shell .admin-shared-sidebar .admin-logout,
+  .seller-shell app-seller-sidebar .seller-sidebar .seller-logout,
+  .staff-shell app-staff-sidebar .staff-sidebar .staff-logout {
+    justify-content: flex-start !important;
+    padding: 13px 14px !important;
+  }
+
+  .admin-shell .admin-shared-sidebar nav a > span:last-child,
+  .admin-shell .admin-shared-sidebar nav button > span:last-child,
+  .admin-shell .admin-shared-sidebar .admin-logout > span:last-child,
+  .seller-shell app-seller-sidebar .seller-sidebar nav a > span:last-child,
+  .seller-shell app-seller-sidebar .seller-sidebar .seller-logout > span:last-child,
+  .staff-shell app-staff-sidebar .staff-sidebar nav a > span:last-child,
+  .staff-shell app-staff-sidebar .staff-sidebar .staff-logout > span:last-child {
+    display: inline !important;
+  }
+
+  .mobile-nav-toggle {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1450;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid #dfe8e1;
+    border-radius: 12px;
+    color: #173e33;
+    background: #fff;
+    box-shadow: 0 3px 12px #173e3314;
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .admin-mobile-nav-toggle,
+  .seller-mobile-nav-toggle,
+  .staff-mobile-nav-toggle {
+    display: grid;
+  }
+
+  .mobile-nav-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1350;
+    display: block;
+    background: #102d2359;
+  }
+
+  .admin-main,
+  .seller-main,
+  .staff-main {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  .admin-header,
+  .seller-header,
+  .staff-header {
+    left: 0 !important;
+    width: 100% !important;
+    height: 66px !important;
+    padding: 0 12px 0 66px !important;
+  }
+
+  .admin-content,
+  .seller-content,
+  .staff-content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 88px 12px 28px !important;
+  }
+
+  .admin-page-title {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .staff-page-heading,
+  .seller-title {
+    display: block !important;
+    margin-bottom: 18px;
+  }
+
+  .admin-page-title > :first-child {
+    min-width: 0;
+  }
+
+  .admin-page-title > .admin-page-actions,
+  .admin-page-title > .page-actions,
+  .admin-page-title > .categories-heading {
+    grid-column: 1;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0 !important;
+  }
+
+  .admin-page-title > .admin-back {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0 !important;
+    justify-self: end;
+  }
+
+  .admin-page-title .primary-button,
+  .admin-page-title .secondary-button,
+  .admin-page-title .category-form,
+  .admin-page-title .primary-button,
+  .admin-page-title .secondary-button {
+    max-width: 100%;
+  }
+
+  .admin-page-title h1,
+  .staff-page-heading h1,
+  .seller-title h1 {
+    max-width: 100%;
+    font-size: clamp(28px, 9vw, 36px) !important;
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-page-actions,
+  .admin-page-title > div:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .admin-content,
+  .seller-content,
+  .staff-content,
+  .admin-main,
+  .seller-main,
+  .staff-main {
+    overflow-x: hidden;
+  }
+
+  .admin-metrics,
+  .staff-summary-grid,
+  .seller-metrics,
+  .seller-dashboard-rate-cards,
+  .staff-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-card,
+  .full-admin-card,
+  .seller-card,
+  .staff-card,
+  .cms-table-shell {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .admin-table,
+  .seller-request-row,
+  .seller-rate-row,
+  .staff-row {
+    overflow-wrap: anywhere;
+  }
+
+  .request-table-card,
+  .cms-table-shell,
+  .seller-card {
+    overflow-x: auto;
+  }
+
+  .admin-user strong,
+  .seller-header b,
+  .seller-header small,
+  .staff-header strong,
+  .staff-header small {
+    display: none !important;
+  }
+
+  .notification-button,
+  .seller-notification-button,
+  .staff-notification-button {
+    margin-right: 2px !important;
+  }
+}

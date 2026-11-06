@@ -1,0 +1,43 @@
+<div class="admin-shell">
+  <app-admin-sidebar [activeView]="'dashboard'"></app-admin-sidebar>
+  <main class="admin-main">
+    <header class="admin-header"><span>ScrapFlow</span></header>
+    <section class="admin-content email-content">
+      <div class="admin-page-title">
+        <div><p class="eyebrow">SETTINGS</p><h1>Email Configuration</h1></div>
+        <div class="page-actions"><button type="button" class="primary-button" (click)="open()">Add</button><button type="button" class="admin-back" (click)="goBack()" aria-label="Back">←</button></div>
+      </div>
+      <p class="page-description">Manage SMTP credentials used by ScrapFlow emails.</p>
+      <div class="alert error" *ngIf="error">{{ error }}</div>
+      <div class="alert success" *ngIf="message">{{ message }}</div>
+      <section class="admin-card full-admin-card admin-list-page">
+        <app-query-bar searchPlaceholder="Search email configurations..." [searchValue]="search" [filters]="filters" [selectedFilter]="filter" [viewMode]="viewMode" (searchChange)="onSearchChange($event)" (filterChange)="onFilterChange($event)" (viewModeChange)="viewMode = $event"></app-query-bar>
+        <app-cdn-table [columns]="columns" [rows]="filteredConfigs" [loading]="loading" [viewMode]="viewMode === 'table' ? 'list' : 'card'" [pagination]="true" [pageSize]="pageSize" [currentPage]="currentPage" [pageSizeOptions]="[5, 10, 25, 50]" emptyMessage="No email configurations found." (pageChange)="currentPage = $event" (pageSizeChange)="pageSize = $event">
+          <ng-template cdnTableCell="name" let-row><strong>{{ row.name }}</strong><small>{{ row.provider }}</small></ng-template>
+          <ng-template cdnTableCell="smtp_host" let-row>{{ row.smtp_host }}:{{ row.smtp_port }}</ng-template>
+          <ng-template cdnTableCell="enabled" let-row><span class="status-pill" [class.status-green]="row.enabled" [class.status-orange]="!row.enabled">{{ row.enabled ? 'Active' : 'Inactive' }}</span></ng-template>
+          <ng-template cdnTableActions let-row><app-actions [items]="configurationActions(row)"></app-actions></ng-template>
+        </app-cdn-table>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div class="email-modal-backdrop" *ngIf="form" (click)="close()">
+  <section class="email-modal" (click)="$event.stopPropagation()">
+    <div class="email-modal-heading"><h2>{{ form.id ? 'Edit' : 'Add' }} email configuration</h2><button type="button" class="modal-close" (click)="close()" aria-label="Close">×</button></div>
+    <div class="email-fields">
+      <label>Name<input [(ngModel)]="form.name" /></label>
+      <label>Environment<select [(ngModel)]="form.environment"><option>ALL</option><option>DEV</option><option>PROD</option></select></label>
+      <label>Provider<input [(ngModel)]="form.provider" /></label>
+      <label>SMTP host<input [(ngModel)]="form.smtp_host" /></label>
+      <label>Port<input type="number" [(ngModel)]="form.smtp_port" /></label>
+      <label>Username<input [(ngModel)]="form.smtp_username" /></label>
+      <label>Password<input type="password" [(ngModel)]="form.smtp_password" placeholder="******** to keep existing" /></label>
+      <label>From email<input type="email" [(ngModel)]="form.from_email" /></label>
+      <label>From name<input [(ngModel)]="form.from_name" /></label>
+      <label class="checkbox"><input type="checkbox" [(ngModel)]="form.enabled" /> Active</label>
+    </div>
+    <div class="email-modal-actions"><button type="button" class="outline-orange" (click)="close()">Cancel</button><button type="button" class="primary-button" (click)="save()">Save</button></div>
+  </section>
+</div>

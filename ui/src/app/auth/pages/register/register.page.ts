@@ -20,6 +20,8 @@ export class RegisterPageComponent {
   mobileNumber = "";
   password = "";
   confirmPassword = "";
+  showPassword = false;
+  showConfirmPassword = false;
   businessName = "";
   gstin = "";
   approximateQuantity: number | undefined;
@@ -48,8 +50,8 @@ export class RegisterPageComponent {
         approximateQuantity: this.approximateQuantity ?? null,
       });
 
-      this.success = "Account created successfully. Opening your workspace...";
-      setTimeout(() => void this.router.navigateByUrl("/seller/request"), 500);
+      this.success = "Account created successfully. Please sign in to continue.";
+      setTimeout(() => void this.router.navigateByUrl("/sign-in"), 800);
     } catch (error) {
       this.error = this.auth.errorMessage(
         error,

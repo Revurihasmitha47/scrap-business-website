@@ -1,3 +1,17 @@
 :host {
   display: block;
 }
+.auth-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.forgot-link {
+  width: 100%;
+  color: #087345;
+  font-weight: 700;
+  text-align: left;
+}

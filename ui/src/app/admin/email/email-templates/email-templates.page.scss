@@ -1,0 +1,30 @@
+:host { display: block; }
+.email-content { position: relative; }
+.admin-page-title { justify-content: space-between; }
+.page-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.page-description { margin: -18px 0 24px; color: #72857b; }
+.template-types { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.template-types span { padding: 10px 14px; border: 1px solid #dce8db; border-radius: 9px; background: #fff; }
+.template-types small { display: block; margin-top: 3px; color: #899a8d; font-size: 11px; }
+.cms-table-row small { display: block; color: #899a8d; font-size: 11px; }
+.email-modal-backdrop { position: fixed; inset: 0; z-index: 1300; display: grid; place-items: center; padding: 20px; background: rgba(23, 62, 51, .35); }
+.email-modal { width: min(850px, calc(100vw - 40px)); max-height: calc(100vh - 60px); overflow: auto; border: 1px solid #dfeae1; border-radius: 16px; background: #fff; box-shadow: 0 20px 50px rgba(23, 62, 51, .24); }
+.small-modal { width: min(620px, calc(100vw - 40px)); }
+.email-modal-heading { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; border-bottom: 1px solid #e7ece8; }
+.email-modal-heading h2 { margin: 0; color: #123e32; }
+.modal-close { padding: 0; color: #60776b; background: transparent; font-size: 28px; }
+.email-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 28px; }
+.email-fields label { display: grid; gap: 8px; color: #273f35; font-size: 14px; font-weight: 700; }
+.email-fields input, .email-fields select, .email-fields textarea { min-height: 44px; padding: 10px 12px; border: 1px solid #cfddd2; border-radius: 7px; font: inherit; background: #fff; }
+.email-fields small { color: #72857b; font-size: 11px; font-weight: 400; }
+.editor-tools, .schema-tools { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 6px; }
+.tool-button { padding: 5px 10px; border: 1px solid #00a9d8; border-radius: 12px; color: #008bb2; background: #fff; font-size: 11px; }
+.visual-preview { min-height: 210px; padding: 14px; overflow: auto; border: 1px solid #cfddd2; border-radius: 7px; background: #f7fafc; }
+.variable-help { padding: 10px 0; color: #40584d; font-size: 12px; }
+.variable-help ul { margin: 5px 0 8px; padding-left: 20px; }
+.variable-help code { color: #e34b91; }
+.wide { grid-column: 1 / -1; }
+.checkbox { display: flex !important; align-items: center; gap: 8px; }
+.checkbox input { min-height: 0; width: auto; }
+.email-modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 20px 28px 24px; border-top: 1px solid #e7ece8; }
+@media (max-width: 700px) { .email-fields { grid-template-columns: 1fr; padding: 18px; } .email-modal-heading, .email-modal-actions { padding-left: 18px; padding-right: 18px; } }
